@@ -1322,6 +1322,7 @@ class Parser {
                 case TokenKind::IntegerLiteralToken:
 
                 case TokenKind::StringLiteralToken:
+                case TokenKind::EncapsedAndWhitespace:
 
                 case TokenKind::SingleQuoteToken:
                 case TokenKind::DoubleQuoteToken:
@@ -1415,6 +1416,7 @@ class Parser {
                 return $this->parseNumericLiteralExpression($parentNode);
 
             case TokenKind::StringLiteralToken:
+            case TokenKind::EncapsedAndWhitespace:
                 return $this->parseStringLiteralExpression($parentNode);
 
             case TokenKind::DoubleQuoteToken:
@@ -2824,7 +2826,7 @@ class Parser {
                     TokenKind::InvalidOctalLiteralToken,
                     TokenKind::InvalidHexadecimalLiteral,
                     TokenKind::InvalidBinaryLiteral,
-                    TokenKind::StringLiteralToken
+                    TokenKind::StringLiteralToken,
                 ); // TODO simplify
 
             return $declareDirective;
