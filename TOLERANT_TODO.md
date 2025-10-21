@@ -23,10 +23,11 @@ Double-check tolerant against the language changes that shipped with 8.3:
 
 ### PHP 8.4
 
-- **Property access hooks** (`public int $count { get => ...; set { ... } }`):
+- **Property access hooks** (`public int $count { get => ...; set { ... } }`): **(implemented)**
   - Tokenizer must recognise `get`/`set` (and hook modifiers) in this context.
   - Introduce AST nodes for hook lists/bodies that align with php-ast’s `AST_PROP_ELEM` `hooks` child.
   - Update diagnostics to catch invalid hook combinations.
+  - Conversion now produces `AST_PROPERTY_HOOK`/`AST_PROPERTY_HOOK_SHORT_BODY` nodes; add regression coverage to guard against regressions.
 - **Asymmetric visibility v2** (`public(set) private(get) $prop;`): extend the modifier grammar, update `TokenKind`, and cover tolerant AST flag handling.
 - **`new Foo()->bar()` without wrapping parentheses**: confirm parser handles the reduced precedence and add regression tests.
 - **Property hook improvements** (hook attributes, multiple hooks per property, etc.): ensure attribute placement and hook ordering are represented correctly.
