@@ -5,7 +5,9 @@ class Counter {
 
     public int $count {
         get => $this->value;
-        set (int $newValue) => $this->value = max(0, $newValue);
+        set (int $newValue) {
+            $this->value = max(0, $newValue);
+        }
     }
 }
 
