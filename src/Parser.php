@@ -1614,6 +1614,26 @@ class Parser {
         return $modifiers;
     }
 
+    /** @return Token[] */
+    private function parsePropertyHookModifiers(): array {
+        $modifiers = [];
+        while (true) {
+            $token = $this->getCurrentToken();
+            switch ($token->kind) {
+                case TokenKind::PublicKeyword:
+                case TokenKind::ProtectedKeyword:
+                case TokenKind::PrivateKeyword:
+                case TokenKind::StaticKeyword:
+                case TokenKind::FinalKeyword:
+                    $modifiers[] = $token;
+                    $this->advanceToken();
+                    continue 2;
+            }
+            break;
+        }
+        return $modifiers;
+    }
+
     private function isParameterStartFn() {
         return function ($token) {
             switch ($token->kind) {
@@ -3527,6 +3547,7 @@ class Parser {
             $hook->attributes = $this->parseAttributeGroups($hook);
         }
 
+        $hook->modifiers = $this->parsePropertyHookModifiers();
         $token = $this->getCurrentToken();
         if ($token->kind === TokenKind::Name) {
             $text = \strtolower(\trim($token->getText($this->sourceFile->fileContents)));
