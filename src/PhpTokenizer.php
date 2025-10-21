@@ -108,11 +108,22 @@ class PhpTokenizer implements TokenStreamProviderInterface {
 
         // Convert tokens from token_get_all to Token instances,
         // skipping whitespace and (usually, when parseContext is null) comments.
-        foreach ($tokens as $token) {
+        $tokens = \array_values($tokens);
+        $tokenCount = \count($tokens);
+        for ($i = 0; $i < $tokenCount; $i++) {
+            $token = $tokens[$i];
             if (\is_array($token)) {
                 $tokenKind = $token[0];
                 $strlen = \strlen($token[1]);
             } else {
+                if ($token === '|' && $i + 1 < $tokenCount && $tokens[$i + 1] === '>') {
+                    $pos += 1; // '|'
+                    $i++;
+                    $pos += 1; // '>'
+                    $arr[] = new Token(TokenKind::PipeToken, $fullStart, $start, $pos - $fullStart);
+                    $start = $fullStart = $pos;
+                    continue;
+                }
                 $pos += \strlen($token);
                 $newTokenKind = self::TOKEN_MAP[$token] ?? TokenKind::Unknown;
                 $arr[] = new Token($newTokenKind, $fullStart, $start, $pos - $fullStart);
