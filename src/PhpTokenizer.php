@@ -149,7 +149,48 @@ class PhpTokenizer implements TokenStreamProviderInterface {
                     $start = $fullStart = $pos;
                     break;
                 case \T_OPEN_TAG:
+                    if ($token[1] === '<?' && $i + 1 < $tokenCount) {
+                        $nextToken = $tokens[$keys[$i + 1]];
+                        if (\is_array($nextToken) && $nextToken[0] === \T_STRING && \strcasecmp($nextToken[1], 'php') === 0) {
+                            $pos += \strlen($nextToken[1]);
+                            $i++;
+                            $strlen += \strlen($nextToken[1]);
+                        }
+                    }
                     $arr[] = new Token(TokenKind::ScriptSectionStartTag, $fullStart, $start, $pos-$fullStart);
+                    $start = $fullStart = $pos;
+                    break;
+                case \T_YIELD:
+                    if ($treatCommentsAsTrivia) {
+                        $yieldFromEndIndex = $i;
+                        for ($lookahead = $i + 1; $lookahead < $tokenCount; $lookahead++) {
+                            $lookaheadToken = $tokens[$keys[$lookahead]];
+                            if (\is_array($lookaheadToken)) {
+                                $lookaheadKind = $lookaheadToken[0];
+                                if ($lookaheadKind === \T_WHITESPACE) {
+                                    continue;
+                                }
+                                if (($lookaheadKind === \T_COMMENT || $lookaheadKind === \T_DOC_COMMENT) && $treatCommentsAsTrivia) {
+                                    continue;
+                                }
+                                if ($lookaheadKind === \T_STRING && \strcasecmp($lookaheadToken[1], 'from') === 0) {
+                                    $yieldFromEndIndex = $lookahead;
+                                }
+                            }
+                            break;
+                        }
+                        if ($yieldFromEndIndex !== $i) {
+                            for ($consume = $i + 1; $consume <= $yieldFromEndIndex; $consume++) {
+                                $consumed = $tokens[$keys[$consume]];
+                                $pos += \is_array($consumed) ? \strlen($consumed[1]) : \strlen($consumed);
+                            }
+                            $i = $yieldFromEndIndex;
+                            $arr[] = new Token(TokenKind::YieldFromKeyword, $fullStart, $start, $pos - $fullStart);
+                            $start = $fullStart = $pos;
+                            break;
+                        }
+                    }
+                    $arr[] = new Token(TokenKind::YieldKeyword, $fullStart, $start, $pos - $fullStart);
                     $start = $fullStart = $pos;
                     break;
                 case \PHP_VERSION_ID >= 80000 ? \T_NAME_QUALIFIED : -1000:
@@ -167,8 +208,8 @@ class PhpTokenizer implements TokenStreamProviderInterface {
                     //
                     // T_NAME_* was added in php 8.0 to forbid whitespace between parts of names.
                     // Here, emulate the tokenization of php 7 by splitting it up into 1 or more tokens.
-                    foreach (\explode('\\', $token[1]) as $i => $name) {
-                        if ($i) {
+                    foreach (\explode('\\', $token[1]) as $segmentIndex => $name) {
+                        if ($segmentIndex) {
                             $arr[] = new Token(TokenKind::BackslashToken, $fullStart, $start, 1 + $start - $fullStart);
                             $start++;
                             $fullStart = $start;
@@ -185,9 +226,9 @@ class PhpTokenizer implements TokenStreamProviderInterface {
                     break;
                 case \PHP_VERSION_ID >= 80000 ? \T_NAME_RELATIVE : -1002:
                     // This is a namespace-relative name: namespace\...
-                    foreach (\explode('\\', $token[1]) as $i => $name) {
+                    foreach (\explode('\\', $token[1]) as $segmentIndex => $name) {
                         $len = \strlen($name);
-                        if (!$i) {
+                        if (!$segmentIndex) {
                             $arr[] = new Token(TokenKind::NamespaceKeyword, $fullStart, $start, $len + $start - $fullStart);
                             $start += $len;
                             $fullStart = $start;

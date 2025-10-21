@@ -4,10 +4,20 @@
             {
                 "InlineHtml": {
                     "scriptSectionEndTag": null,
-                    "text": {
-                        "kind": "InlineHtml",
-                        "textLength": 7
+                    "text": null,
+                    "scriptSectionStartTag": {
+                        "kind": "ScriptSectionStartTag",
+                        "textLength": 5
+                    }
+                }
+            },
+            {
+                "InlineHtml": {
+                    "scriptSectionEndTag": {
+                        "kind": "ScriptSectionEndTag",
+                        "textLength": 2
                     },
+                    "text": null,
                     "scriptSectionStartTag": null
                 }
             }

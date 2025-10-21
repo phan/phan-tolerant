@@ -3431,14 +3431,20 @@ class Parser {
             $propertyDeclaration->typeDeclarationList = new MissingToken(TokenKind::PropertyType, $this->token->fullStart);
         }
         $propertyDeclaration->propertyElements = $this->parsePropertyElementList($propertyDeclaration);
-        $requiresSemicolon = true;
+        $hasPropertyWithHooks = false;
+        $hasPlainProperty = false;
         foreach ($propertyDeclaration->propertyElements->children ?? [] as $child) {
-            if ($child instanceof PropertyElement && $child->hookList !== null) {
-                $requiresSemicolon = false;
-                break;
+            if (!$child instanceof PropertyElement) {
+                continue;
             }
+            if ($child->hookList !== null) {
+                $hasPropertyWithHooks = true;
+                continue;
+            }
+            $hasPlainProperty = true;
+            break;
         }
-        if ($requiresSemicolon) {
+        if ($hasPlainProperty || !$hasPropertyWithHooks) {
             $propertyDeclaration->semicolon = $this->eat1(TokenKind::SemicolonToken);
         } else {
             $propertyDeclaration->semicolon = $this->eatOptional1(TokenKind::SemicolonToken);
