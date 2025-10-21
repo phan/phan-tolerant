@@ -36,13 +36,27 @@
                                 {
                                     "ClassConstDeclaration": {
                                         "attributes": null,
-                                        "modifiers": [],
+                                        "modifiers": [
+                                            {
+                                                "kind": "PublicKeyword",
+                                                "textLength": 6
+                                            }
+                                        ],
                                         "constKeyword": {
                                             "kind": "ConstKeyword",
                                             "textLength": 5
                                         },
                                         "questionToken": null,
-                                        "typeDeclarationList": null,
+                                        "typeDeclarationList": {
+                                            "QualifiedNameList": {
+                                                "children": [
+                                                    {
+                                                        "kind": "IntReservedWord",
+                                                        "textLength": 3
+                                                    }
+                                                ]
+                                            }
+                                        },
                                         "constElements": {
                                             "ConstElementList": {
                                                 "children": [
@@ -50,17 +64,19 @@
                                                         "ConstElement": {
                                                             "name": {
                                                                 "kind": "Name",
-                                                                "textLength": 1
+                                                                "textLength": 2
                                                             },
                                                             "equalsToken": {
-                                                                "error": "MissingToken",
                                                                 "kind": "EqualsToken",
-                                                                "textLength": 0
+                                                                "textLength": 1
                                                             },
                                                             "assignment": {
-                                                                "error": "MissingToken",
-                                                                "kind": "Expression",
-                                                                "textLength": 0
+                                                                "NumericLiteral": {
+                                                                    "children": {
+                                                                        "kind": "IntegerLiteralToken",
+                                                                        "textLength": 1
+                                                                    }
+                                                                }
                                                             }
                                                         }
                                                     }

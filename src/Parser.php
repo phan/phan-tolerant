@@ -3401,10 +3401,41 @@ class Parser {
 
         $classConstDeclaration->modifiers = $modifiers;
         $classConstDeclaration->constKeyword = $this->eat1(TokenKind::ConstKeyword);
+        $this->parseClassConstType($classConstDeclaration);
         $classConstDeclaration->constElements = $this->parseConstElements($classConstDeclaration);
         $classConstDeclaration->semicolon = $this->eat1(TokenKind::SemicolonToken);
 
         return $classConstDeclaration;
+    }
+
+    private function parseClassConstType(ClassConstDeclaration $classConstDeclaration): void
+    {
+        $startPosition = $this->lexer->getCurrentPosition();
+        $startToken = $this->token;
+
+        $questionToken = $this->eatOptional1(TokenKind::QuestionToken);
+        $typeDeclarationList = $this->tryParseParameterTypeDeclarationList($classConstDeclaration);
+
+        if ($questionToken !== null || $typeDeclarationList !== null) {
+            if ($this->getCurrentToken()->kind === TokenKind::Name) {
+                $classConstDeclaration->questionToken = $questionToken;
+                if ($typeDeclarationList !== null) {
+                    $classConstDeclaration->typeDeclarationList = $typeDeclarationList;
+                } else {
+                    $classConstDeclaration->typeDeclarationList = new MissingToken(TokenKind::ClassConstType, $this->token->fullStart);
+                }
+                return;
+            }
+
+            if ($questionToken !== null && $typeDeclarationList === null) {
+                $classConstDeclaration->questionToken = $questionToken;
+                $classConstDeclaration->typeDeclarationList = new MissingToken(TokenKind::ClassConstType, $this->token->fullStart);
+                return;
+            }
+        }
+
+        $this->lexer->setCurrentPosition($startPosition);
+        $this->token = $startToken;
     }
 
     private function parseEnumCaseDeclaration($parentNode) {

@@ -201,6 +201,7 @@ class TokenKind {
     const InlineHtml = 337;
     const PropertyType = 338;
     const EnumType = 339;
+    const ClassConstType = 420;
 
 //    const DollarOpenCurly = 339;
     const EncapsedAndWhitespace = 400;
