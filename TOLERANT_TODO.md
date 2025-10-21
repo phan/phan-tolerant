@@ -16,7 +16,7 @@ This branch tracks work needed to bring the tolerant PHP parser up to date for P
 
 Double-check tolerant against the language changes that shipped with 8.3:
 
-- **Dynamic class constant fetch** (`Foo::{expr}`): ensure tokenizer/grammar accept brace-wrapped expressions after `::`, add fixtures, and mirror php-ast node structure.
+- **Dynamic class constant fetch** (`Foo::{expr}`): ensure tokenizer/grammar accept brace-wrapped expressions after `::`, add fixtures, and mirror php-ast node structure. **(verified via `tests/samples/dynamic_class_const.php`)**
 - **Typed class constants / readonly amendments**: confirm class-constant declarations propagate their type information and `readonly` constraints into tolerant AST output.
 - **`#[\Override]` attribute**: attributes already parse, but we should add fixtures to verify tolerant preserves them on methods.
 - **Arbitrary static variable initialisers**: while this is largely semantic, tolerant should accept the new grammar in function-level `static` declarations and update diagnostics if necessary.
