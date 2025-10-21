@@ -59,7 +59,6 @@ Monitor RFCs merged into php-src and mirror the token/grammar changes, for examp
 ### Integration with Phan
 
 - After implementing features, run Phan’s fallback parser tests (`./tests/run_test __FakeSelfFallbackTest`) to ensure parity.
-- Publish updated tags / commit references so Phan can subtree merge the changes into `third_party/phan-tolerant`.
 
 ### Verification Strategy
 
@@ -84,4 +83,3 @@ Recommended sample inputs for AST diffs (update as new fixtures are added):
 2. Prototype grammar/tokenizer changes for property hooks and regenerate associated AST nodes.
 3. Update diagnostics and tolerant AST converter expectations in tandem with Phan.
 4. Refresh fixtures and CI to cover the new syntax.
-5. Coordinate subtree sync back into Phan once tests pass.
