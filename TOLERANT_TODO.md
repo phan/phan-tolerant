@@ -14,28 +14,34 @@ This branch tracks work needed to bring the tolerant PHP parser up to date for P
 
 ### PHP 8.3
 
-Most 8.3 constructs parse, but we should explicitly verify:
+Double-check tolerant against the language changes that shipped with 8.3:
 
-- `readonly` refinements (interfaces, class constants) – ensure new modifiers propagate through `Parser` and AST classes.
-- Enum improvements (interface inheritance rules, optional `implements` lists) – confirm grammar and diagnostics still match php-src.
-- Property initialisers inside `readonly` classes behave the same as php-ast output.
+- **Dynamic class constant fetch** (`Foo::{expr}`): ensure tokenizer/grammar accept brace-wrapped expressions after `::`, add fixtures, and mirror php-ast node structure.
+- **Typed class constants / readonly amendments**: confirm class-constant declarations propagate their type information and `readonly` constraints into tolerant AST output.
+- **`#[\Override]` attribute**: attributes already parse, but we should add fixtures to verify tolerant preserves them on methods.
+- **Arbitrary static variable initialisers**: while this is largely semantic, tolerant should accept the new grammar in function-level `static` declarations and update diagnostics if necessary.
 
 ### PHP 8.4
 
-- **Property hooks** (`public int $count { get => $this->value; set { ... } }`).
-  - Extend the tokenizer/grammar so `get`/`set` in this context become dedicated tokens (not identifiers).
-  - Update AST node classes to represent hook lists and bodies.
-  - Adjust diagnostics and tolerant AST converter (in Phan) to populate the `hooks` child.
-- New attribute placements (e.g. attributes on `class const`, hook blocks) must be accepted and serialized.
-- `readonly` class improvements and intersection types: confirm parser emits the correct flags and up-to-date diagnostics.
+- **Property access hooks** (`public int $count { get => ...; set { ... } }`):
+  - Tokenizer must recognise `get`/`set` (and hook modifiers) in this context.
+  - Introduce AST nodes for hook lists/bodies that align with php-ast’s `AST_PROP_ELEM` `hooks` child.
+  - Update diagnostics to catch invalid hook combinations.
+- **Asymmetric visibility v2** (`public(set) private(get) $prop;`): extend the modifier grammar, update `TokenKind`, and cover tolerant AST flag handling.
+- **`new Foo()->bar()` without wrapping parentheses**: confirm parser handles the reduced precedence and add regression tests.
+- **Property hook improvements** (hook attributes, multiple hooks per property, etc.): ensure attribute placement and hook ordering are represented correctly.
+- Audit additional 8.4 deprecations that change parsing (e.g. implicit nullable parameters) to ensure tolerant still emits matching diagnostics.
 
 ### PHP 8.5 (in progress)
 
 Monitor RFCs merged into php-src and mirror the token/grammar changes, for example:
 
-- Asymmetric property visibility.
-- Additional keywords or attribute positions.
-- New `T_*` tokens introduced in php-src; update `TokenKind.php` and `TokenStringMaps.php` accordingly.
+- **Pipe operator** (`expr |> func(...)`): add new tokens, precedence rules, AST nodes, and fixtures.
+- **`clone with`** expressions: model the new syntax (`clone $obj with { prop: value }`) and ensure node mapping covers the initializer list.
+- **Final property promotion** (`final public function __construct(private final string $x) {}`): allow `final` in promoted parameters and carry flags into tolerant AST.
+- **Attributes on constants / extended attribute targets**: verify attributes on constants and traits are preserved.
+- **Extend `#[\Override]` to properties / `#[\NoDiscard]` / `#[\DelayedTargetValidation]`**: attributes already parse, but add regression coverage to ensure tolerant does not misclassify their targets.
+- Track any additional keywords (`with`, operator tokens, etc.) and update `TokenKind.php` / `TokenStringMaps.php` accordingly.
 
 ### Diagnostics & Node Mapping
 
@@ -61,4 +67,3 @@ Monitor RFCs merged into php-src and mirror the token/grammar changes, for examp
 3. Update diagnostics and tolerant AST converter expectations in tandem with Phan.
 4. Refresh fixtures and CI to cover the new syntax.
 5. Coordinate subtree sync back into Phan once tests pass.
-
