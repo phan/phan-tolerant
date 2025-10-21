@@ -2,7 +2,7 @@
 
 ## Overview
 
-This branch tracks work needed to bring the tolerant PHP parser up to date for PHP 8.3, 8.4, and 8.5 so that downstream consumers (notably Phan) can rely on it when the native `ext-ast` extension is unavailable. The fork currently matches upstream commit `457738cbe` (September 2024) and is missing several recent language features.
+This branch tracks work needed to bring the tolerant PHP parser up to date for PHP 8.3, 8.4, and 8.5 so that downstream consumers (notably Phan) can rely on it when the native `ext-ast` extension is unavailable. Phan lives in the sibling repo located at `~/phan`, and its tolerant-to-php-ast bridge (`src/Phan/AST/TolerantASTConverter/TolerantASTConverter.php`) often needs to evolve in lockstep with changes made here. The fork currently matches upstream commit `457738cbe` (September 2024) and is missing several recent language features.
 
 ## Current Status
 
@@ -27,7 +27,7 @@ Double-check tolerant against the language changes that shipped with 8.3:
   - Tokenizer must recognise `get`/`set` (and hook modifiers) in this context.
   - Introduce AST nodes for hook lists/bodies that align with php-ast’s `AST_PROP_ELEM` `hooks` child.
   - Update diagnostics to catch invalid hook combinations.
-  - Conversion now produces `AST_PROPERTY_HOOK`/`AST_PROPERTY_HOOK_SHORT_BODY` nodes; add regression coverage to guard against regressions.
+  - Conversion now produces `AST_PROPERTY_HOOK`/`AST_PROPERTY_HOOK_SHORT_BODY` nodes; add regression coverage to guard against regressions (remember to mirror any AST shape changes in Phan’s converter at `~/phan/src/Phan/AST/TolerantASTConverter/TolerantASTConverter.php`).
 - **Asymmetric visibility v2** (`public(set) private(get) $prop;`): extend the modifier grammar, update `TokenKind`, and cover tolerant AST flag handling.
 - **`new Foo()->bar()` without wrapping parentheses**: confirm parser handles the reduced precedence and add regression tests.
 - **Property hook improvements** (hook attributes, multiple hooks per property, etc.): ensure attribute placement and hook ordering are represented correctly.
@@ -58,11 +58,11 @@ Monitor RFCs merged into php-src and mirror the token/grammar changes, for examp
 
 ### Integration with Phan
 
-- After implementing features, run Phan’s fallback parser tests (`./tests/run_test __FakeSelfFallbackTest`) to ensure parity.
+- After implementing features, run Phan’s fallback parser tests (`./tests/run_test __FakeSelfFallbackTest`) to ensure parity, and adjust the tolerant AST converter (`~/phan/src/Phan/AST/TolerantASTConverter/TolerantASTConverter.php`) as needed so both repositories stay in sync.
 
 ### Verification Strategy
 
-- **AST comparison**: use Phan’s `tools/dump_ast.php` (php-ast) to capture the expected AST for new syntax. For the tolerant side, run `php tools/PrintTolerantAst.php` (raw tolerant tree) in combination with Phan’s `internal/dump_fallback_ast.php` (uses the converter) to ensure both the parse tree and converted php-ast structures match expectations.
+- **AST comparison**: use Phan’s `tools/dump_ast.php` (php-ast) to capture the expected AST for new syntax. For the tolerant side, run `php tools/PrintTolerantAst.php` (raw tolerant tree) in combination with Phan’s `internal/dump_fallback_ast.php` (which invokes `src/Phan/AST/TolerantASTConverter/TolerantASTConverter.php`) to ensure both the parse tree and converted php-ast structures match expectations across the two projects.
 - **PHP runtime selection**: on this dev machine we can run `sudo newphp 83`, `sudo newphp 84`, etc. to switch CLI versions; other environments may require Docker images, phpenv, asdf, etc. Record the PHP version used when regenerating fixtures.
 - **Leverage Phan fixtures**: pull feature-specific testcases (e.g. property hooks, asymmetric visibility) from `phan/tests/files/src` into tolerant’s parser tests to validate new constructs.
 - **Run tolerant PHPUnit suites**: keep `vendor/bin/phpunit --testsuite invariants,api` (with `zend.assertions=1`) as a fast regression check while iterating.
