@@ -3417,7 +3417,7 @@ class Parser {
         $typeDeclarationList = $this->tryParseParameterTypeDeclarationList($classConstDeclaration);
 
         if ($questionToken !== null || $typeDeclarationList !== null) {
-            if ($this->getCurrentToken()->kind === TokenKind::Name) {
+            if (\in_array($this->getCurrentToken()->kind, $this->nameOrKeywordOrReservedWordTokens, true)) {
                 $classConstDeclaration->questionToken = $questionToken;
                 if ($typeDeclarationList !== null) {
                     $classConstDeclaration->typeDeclarationList = $typeDeclarationList;
