@@ -67,6 +67,16 @@ Monitor RFCs merged into php-src and mirror the token/grammar changes, for examp
 - **Leverage Phan fixtures**: pull feature-specific testcases (e.g. property hooks, asymmetric visibility) from `phan/tests/files/src` into tolerant’s parser tests to validate new constructs.
 - **Run tolerant PHPUnit suites**: keep `vendor/bin/phpunit --testsuite invariants,api` (with `zend.assertions=1`) as a fast regression check while iterating.
 
+Recommended sample inputs for AST diffs (update as new fixtures are added):
+
+| Feature | Sample file(s) | Min PHP | Native AST dump | Tolerant dump |
+| --- | --- | --- | --- | --- |
+| Dynamic class const fetch | `phan/tests/files/src/0847_dynamic_class_const.php` (create) | 8.3 | `php tools/dump_ast.php …` | `php tools/PrintTolerantAst.php …` |
+| Property hooks | `phan/tests/files/src/1166_property_hooks.php` | 8.4 | `php tools/dump_ast.php …` | `php tools/PrintTolerantAst.php …` |
+| Asymmetric visibility props | (add fixture) | 8.4 | … | … |
+| Pipe operator | (add fixture once implemented) | 8.5 | … | … |
+| `clone with` expressions | (add fixture) | 8.5 | … | … |
+
 ## Next Steps
 
 1. Audit existing fixtures vs php-src 8.3/8.4 syntax to catalogue precise failures.
