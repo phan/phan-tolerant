@@ -62,7 +62,7 @@ Monitor RFCs merged into php-src and mirror the token/grammar changes, for examp
 
 ### Verification Strategy
 
-- **AST comparison**: use Phan’s `tools/dump_ast.php` (php-ast) to capture the expected AST for new syntax. Create or extend a tolerant-side helper (instantiate `Microsoft\PhpParser\Parser` and `var_dump` the node tree) so we can diff tolerant output against php-ast.
+- **AST comparison**: use Phan’s `tools/dump_ast.php` (php-ast) to capture the expected AST for new syntax. For the tolerant side, run `php tools/PrintTolerantAst.php` (raw tolerant tree) in combination with Phan’s `internal/dump_fallback_ast.php` (uses the converter) to ensure both the parse tree and converted php-ast structures match expectations.
 - **PHP runtime selection**: on this dev machine we can run `sudo newphp 83`, `sudo newphp 84`, etc. to switch CLI versions; other environments may require Docker images, phpenv, asdf, etc. Record the PHP version used when regenerating fixtures.
 - **Leverage Phan fixtures**: pull feature-specific testcases (e.g. property hooks, asymmetric visibility) from `phan/tests/files/src` into tolerant’s parser tests to validate new constructs.
 - **Run tolerant PHPUnit suites**: keep `vendor/bin/phpunit --testsuite invariants,api` (with `zend.assertions=1`) as a fast regression check while iterating.
