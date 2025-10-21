@@ -1614,6 +1614,30 @@ class Parser {
         return $modifiers;
     }
 
+    /**
+     * Parse modifiers that are allowed on property hooks (visibility, static, final).
+     *
+     * @return Token[]
+     */
+    private function parsePropertyHookModifiers(): array {
+        $modifiers = [];
+        while (true) {
+            $token = $this->getCurrentToken();
+            switch ($token->kind) {
+                case TokenKind::PublicKeyword:
+                case TokenKind::ProtectedKeyword:
+                case TokenKind::PrivateKeyword:
+                case TokenKind::StaticKeyword:
+                case TokenKind::FinalKeyword:
+                    $modifiers[] = $token;
+                    $this->advanceToken();
+                    continue 2;
+            }
+            break;
+        }
+        return $modifiers;
+    }
+
     private function isParameterStartFn() {
         return function ($token) {
             switch ($token->kind) {
@@ -3526,6 +3550,8 @@ class Parser {
         if ($this->getCurrentToken()->kind === TokenKind::AttributeToken) {
             $hook->attributes = $this->parseAttributeGroups($hook);
         }
+
+        $hook->modifiers = $this->parsePropertyHookModifiers();
 
         $token = $this->getCurrentToken();
         if ($token->kind === TokenKind::Name) {

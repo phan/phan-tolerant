@@ -6,12 +6,15 @@
 
 namespace Microsoft\PhpParser\Node;
 
+use Microsoft\PhpParser\ModifiedTypeInterface;
+use Microsoft\PhpParser\ModifiedTypeTrait;
 use Microsoft\PhpParser\Node;
 use Microsoft\PhpParser\Node\DelimitedList\ParameterDeclarationList;
 use Microsoft\PhpParser\Node\Statement\CompoundStatementNode;
 use Microsoft\PhpParser\Token;
 
-class PropertyHook extends Node {
+class PropertyHook extends Node implements ModifiedTypeInterface {
+    use ModifiedTypeTrait;
     /** @var AttributeGroup[]|null */
     public $attributes;
 
@@ -41,6 +44,7 @@ class PropertyHook extends Node {
 
     const CHILD_NAMES = [
         'attributes',
+        'modifiers',
         'hookKeyword',
         'openParen',
         'parameterList',
