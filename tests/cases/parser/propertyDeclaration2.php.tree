@@ -45,11 +45,11 @@
                                         "questionToken": null,
                                         "typeDeclarationList": null,
                                         "propertyElements": {
-                                            "ExpressionList": {
+                                            "PropertyElementList": {
                                                 "children": [
                                                     {
-                                                        "AssignmentExpression": {
-                                                            "leftOperand": {
+                                                        "PropertyElement": {
+                                                            "variable": {
                                                                 "Variable": {
                                                                     "dollar": null,
                                                                     "name": {
@@ -58,12 +58,11 @@
                                                                     }
                                                                 }
                                                             },
-                                                            "operator": {
+                                                            "equalsToken": {
                                                                 "kind": "EqualsToken",
                                                                 "textLength": 1
                                                             },
-                                                            "byRef": null,
-                                                            "rightOperand": {
+                                                            "initializer": {
                                                                 "AssignmentExpression": {
                                                                     "leftOperand": {
                                                                         "Variable": {
@@ -88,7 +87,8 @@
                                                                         }
                                                                     }
                                                                 }
-                                                            }
+                                                            },
+                                                            "hookList": null
                                                         }
                                                     }
                                                 ]

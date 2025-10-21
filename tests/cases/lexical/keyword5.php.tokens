@@ -4,12 +4,8 @@
         "textLength": 6
     },
     {
-        "kind": "YieldKeyword",
-        "textLength": 5
-    },
-    {
-        "kind": "Name",
-        "textLength": 4
+        "kind": "YieldFromKeyword",
+        "textLength": 22
     },
     {
         "kind": "EndOfFileToken",

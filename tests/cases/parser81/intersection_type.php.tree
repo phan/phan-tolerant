@@ -281,15 +281,22 @@
                                             }
                                         },
                                         "propertyElements": {
-                                            "ExpressionList": {
+                                            "PropertyElementList": {
                                                 "children": [
                                                     {
-                                                        "Variable": {
-                                                            "dollar": null,
-                                                            "name": {
-                                                                "kind": "VariableName",
-                                                                "textLength": 10
-                                                            }
+                                                        "PropertyElement": {
+                                                            "variable": {
+                                                                "Variable": {
+                                                                    "dollar": null,
+                                                                    "name": {
+                                                                        "kind": "VariableName",
+                                                                        "textLength": 10
+                                                                    }
+                                                                }
+                                                            },
+                                                            "equalsToken": null,
+                                                            "initializer": null,
+                                                            "hookList": null
                                                         }
                                                     }
                                                 ]
