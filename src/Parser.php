@@ -4388,7 +4388,23 @@ class Parser {
         $cloneExpression->parent = $parentNode;
 
         $cloneExpression->cloneKeyword = $this->eat1(TokenKind::CloneKeyword);
-        $cloneExpression->expression = $this->parseUnaryExpressionOrHigher($cloneExpression);
+
+        // PHP 8.5: clone can now be used like a function: clone($obj, ["prop" => $val])
+        if ($this->getCurrentToken()->kind === TokenKind::OpenParenToken) {
+            $cloneExpression->openParen = $this->eat1(TokenKind::OpenParenToken);
+            $cloneExpression->expression = $this->parseExpression($cloneExpression);
+
+            // Check for optional second argument (property modifications)
+            if ($this->getCurrentToken()->kind === TokenKind::CommaToken) {
+                $cloneExpression->commaToken = $this->eat1(TokenKind::CommaToken);
+                $cloneExpression->modifications = $this->parseExpression($cloneExpression);
+            }
+
+            $cloneExpression->closeParen = $this->eat1(TokenKind::CloseParenToken);
+        } else {
+            // Traditional syntax: clone $obj
+            $cloneExpression->expression = $this->parseUnaryExpressionOrHigher($cloneExpression);
+        }
 
         return $cloneExpression;
     }
