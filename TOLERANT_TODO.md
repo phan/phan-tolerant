@@ -63,7 +63,15 @@ Monitor RFCs merged into php-src and mirror the token/grammar changes:
   - Supports traditional `clone $obj`, parenthesized `clone($obj)`, and modifications `clone($obj, [...])`
   - Tested in `tests/cases/parser85/clone-*.php` (6 comprehensive tests)
   - Note: Earlier "clone with" RFC v1 (`clone $obj with [...]`) was not accepted; PHP 8.5 uses v2 function syntax
-- **Final property promotion** (`final public function __construct(private final string $x) {}`): allow `final` in promoted parameters and carry flags into tolerant AST.
+- **Final property promotion** (`final string $property`): ✅ **COMPLETE**
+  - Added `FinalKeyword` to `isParameterModifier()` to allow `final` as parameter modifier
+  - Added `FinalKeyword` and `ReadonlyKeyword` to `isParameterStartFn()` for parameter start detection
+  - Supports all syntax variations:
+    - `final string $prop` - Final alone
+    - `public final string $prop` - With visibility
+    - `final readonly string $prop` - With readonly
+    - `public readonly final string $prop` - All modifiers combined
+  - Tested in `tests/cases/parser85/final-promotion-*.php` (5 comprehensive tests)
 - **Attributes on constants / extended attribute targets**: verify attributes on constants and traits are preserved.
 - **Extend `#[\Override]` to properties / `#[\NoDiscard]` / `#[\DelayedTargetValidation]`**: attributes already parse, but add regression coverage to ensure tolerant does not misclassify their targets.
 - Track any additional keywords (`with`, operator tokens, etc.) and update `TokenKind.php` / `TokenStringMaps.php` accordingly.
@@ -102,6 +110,7 @@ Recommended sample inputs for AST diffs (update as new fixtures are added):
 | New without parenthesis | `tests/cases/parser84/new-without-parenthesis.php` | 8.4 | ✅ | (run after `sudo newphp 84`) | same as above |
 | Pipe operator | `tests/cases/parser85/pipe-operator-*.php` | 8.5 | ✅ | `php ~/phan/tools/dump_ast.php --json …` | `php tools/PrintTolerantAst.php …`, `php ~/phan/internal/dump_fallback_ast.php --php-ast …` |
 | Clone with modifications | `tests/cases/parser85/clone-*.php` | 8.5 | ✅ | (run after `sudo newphp 85`) | same as above |
+| Final property promotion | `tests/cases/parser85/final-promotion-*.php` | 8.5 | ✅ | (run after `sudo newphp 85`) | same as above |
 
 ## Completed Work Summary
 
@@ -109,17 +118,16 @@ As of October 2025, the tolerant parser now has full support for:
 
 - **PHP 8.3**: Dynamic class constant fetch, typed class constants (including union types)
 - **PHP 8.4**: Property hooks (with modifiers and edge cases), asymmetric visibility, new without parenthesis, deprecation fixes
-- **PHP 8.5**: Pipe operator, clone with property modifications
+- **PHP 8.5**: Pipe operator, clone with property modifications, final property promotion
 
-**Test Coverage**: 31,458 tests passing across all PHP versions (8.1-8.5)
+**Test Coverage**: 31,463 tests passing across all PHP versions (8.1-8.5)
 **CI Configuration**: Updated to test on PHP 8.1, 8.2, 8.3, 8.4, 8.5.0RC1-cli
 
 ## Next Steps
 
 Remaining PHP 8.5 features to implement:
 
-1. **Final property promotion** - Allow `final` modifier in promoted constructor parameters
-2. **Extended attribute targets** - Verify attributes work on new targets (constants, properties, etc.)
+1. **Extended attribute targets** - Verify attributes work on new targets (constants, properties, etc.)
 
 Additional tasks:
 
