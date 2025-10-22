@@ -92,6 +92,8 @@ class TokenKind {
     const EnumKeyword = 171;
     const ReadonlyKeyword = 172;
     const HaltCompilerKeyword = 173;
+    const PrivateSetKeyword = 174;
+    const ProtectedSetKeyword = 175;
 
     const OpenBracketToken = 201;
     const CloseBracketToken = 202;

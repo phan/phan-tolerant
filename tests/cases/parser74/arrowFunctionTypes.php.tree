@@ -50,6 +50,7 @@
                                                     "Parameter": {
                                                         "attributes": null,
                                                         "visibilityToken": null,
+                                                        "setVisibilityToken": null,
                                                         "modifiers": null,
                                                         "questionToken": null,
                                                         "typeDeclarationList": {
@@ -262,6 +263,7 @@
                                                     "Parameter": {
                                                         "attributes": null,
                                                         "visibilityToken": null,
+                                                        "setVisibilityToken": null,
                                                         "modifiers": null,
                                                         "questionToken": null,
                                                         "typeDeclarationList": null,
@@ -373,6 +375,7 @@
                                                     "Parameter": {
                                                         "attributes": null,
                                                         "visibilityToken": null,
+                                                        "setVisibilityToken": null,
                                                         "modifiers": null,
                                                         "questionToken": null,
                                                         "typeDeclarationList": null,
@@ -464,6 +467,7 @@
                                                     "Parameter": {
                                                         "attributes": null,
                                                         "visibilityToken": null,
+                                                        "setVisibilityToken": null,
                                                         "modifiers": null,
                                                         "questionToken": null,
                                                         "typeDeclarationList": {
@@ -602,6 +606,7 @@
                                                     "Parameter": {
                                                         "attributes": null,
                                                         "visibilityToken": null,
+                                                        "setVisibilityToken": null,
                                                         "modifiers": null,
                                                         "questionToken": null,
                                                         "typeDeclarationList": null,

@@ -54,6 +54,7 @@
                                                     }
                                                 ],
                                                 "visibilityToken": null,
+                                                "setVisibilityToken": null,
                                                 "modifiers": null,
                                                 "questionToken": null,
                                                 "typeDeclarationList": null,

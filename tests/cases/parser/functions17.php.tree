@@ -34,6 +34,7 @@
                                     "Parameter": {
                                         "attributes": null,
                                         "visibilityToken": null,
+                                        "setVisibilityToken": null,
                                         "modifiers": null,
                                         "questionToken": {
                                             "kind": "QuestionToken",
@@ -75,6 +76,7 @@
                                     "Parameter": {
                                         "attributes": null,
                                         "visibilityToken": null,
+                                        "setVisibilityToken": null,
                                         "modifiers": null,
                                         "questionToken": {
                                             "kind": "QuestionToken",
