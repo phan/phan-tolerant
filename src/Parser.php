@@ -3825,6 +3825,39 @@ class Parser {
             case TokenKind::UseKeyword:
 
             case TokenKind::AttributeToken:
+
+            // PHP 8.4: interface property hooks without explicit visibility
+            case TokenKind::QuestionToken:  // nullable type: ?Foo $bar
+            case TokenKind::VariableName:   // no type: $bar
+
+            // Type tokens that can start a property declaration
+            case TokenKind::Name:           // qualified names: Foo $bar
+            case TokenKind::BackslashToken: // fully qualified: \Foo $bar
+            case TokenKind::NamespaceKeyword: // relative: namespace\Foo $bar
+            case TokenKind::OpenParenToken: // DNF types: (A&B)|C $bar
+
+            // Built-in type keywords
+            case TokenKind::ArrayKeyword:
+            case TokenKind::CallableKeyword:
+            case TokenKind::BoolReservedWord:
+            case TokenKind::FloatReservedWord:
+            case TokenKind::IntReservedWord:
+            case TokenKind::StringReservedWord:
+            case TokenKind::ObjectReservedWord:
+            case TokenKind::NullReservedWord:
+            case TokenKind::FalseReservedWord:
+            case TokenKind::TrueReservedWord:
+            case TokenKind::IterableReservedWord:
+            case TokenKind::MixedReservedWord:
+            case TokenKind::VoidReservedWord:
+            case TokenKind::NeverReservedWord:
+
+            // Legacy type aliases (for error recovery)
+            case TokenKind::BooleanReservedWord:
+            case TokenKind::IntegerReservedWord:
+            case TokenKind::DoubleReservedWord:
+            case TokenKind::RealReservedWord:
+            case TokenKind::BinaryReservedWord:
                 return true;
         }
         return false;
