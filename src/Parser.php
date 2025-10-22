@@ -855,6 +855,7 @@ class Parser {
             //
             // TODO: Remove the visibilityToken in a future backwards incompatible release
             $parameter->visibilityToken = $this->eatOptional([TokenKind::PublicKeyword, TokenKind::ProtectedKeyword, TokenKind::PrivateKeyword]);
+            $parameter->setVisibilityToken = $this->eatOptional([TokenKind::ProtectedSetKeyword, TokenKind::PrivateSetKeyword]);
             $parameter->modifiers = $this->parseParameterModifiers() ?: null;
 
             $parameter->questionToken = $this->eatOptional1(TokenKind::QuestionToken);

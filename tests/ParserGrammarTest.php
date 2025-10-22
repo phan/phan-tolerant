@@ -81,11 +81,13 @@ class ParserGrammarTest extends TestCase {
     const PHP74_FILE_PATTERN = __DIR__ . "/cases/parser74/*";
     const PHP80_FILE_PATTERN = __DIR__ . "/cases/parser80/*";
     const PHP81_FILE_PATTERN = __DIR__ . "/cases/parser81/*";
+    const PHP84_FILE_PATTERN = __DIR__ . "/cases/parser84/*";
 
     const PATTERNS_FOR_MINIMUM_PHP_VERSION = [
         [70400, self::PHP74_FILE_PATTERN],
         [80000, self::PHP80_FILE_PATTERN],
         [80100, self::PHP81_FILE_PATTERN],
+        [80400, self::PHP84_FILE_PATTERN],
     ];
 
     public function treeProvider() {

@@ -345,7 +345,9 @@ class PhpTokenizer implements TokenStreamProviderInterface {
         T_LOGICAL_OR => TokenKind::OrKeyword,
         T_PRINT => TokenKind::PrintKeyword,
         T_PRIVATE => TokenKind::PrivateKeyword,
+        327 => TokenKind::PrivateSetKeyword, // T_PRIVATE_SET (PHP 8.4+)
         T_PROTECTED => TokenKind::ProtectedKeyword,
+        328 => TokenKind::ProtectedSetKeyword, // T_PROTECTED_SET (PHP 8.4+)
         T_PUBLIC => TokenKind::PublicKeyword,
         T_READONLY => TokenKind::ReadonlyKeyword,
         T_REQUIRE => TokenKind::RequireKeyword,

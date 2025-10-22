@@ -22,7 +22,7 @@
                     },
                     "name": {
                         "kind": "Name",
-                        "textLength": 1
+                        "textLength": 4
                     },
                     "classBaseClause": null,
                     "classInterfaceClause": null,
@@ -49,7 +49,7 @@
                                         "byRefToken": null,
                                         "name": {
                                             "kind": "Name",
-                                            "textLength": 3
+                                            "textLength": 11
                                         },
                                         "openParen": {
                                             "kind": "OpenParenToken",
@@ -61,16 +61,31 @@
                                                     {
                                                         "Parameter": {
                                                             "attributes": null,
-                                                            "visibilityToken": null,
-                                                            "setVisibilityToken": null,
+                                                            "visibilityToken": {
+                                                                "kind": "PublicKeyword",
+                                                                "textLength": 6
+                                                            },
+                                                            "setVisibilityToken": {
+                                                                "kind": "PrivateSetKeyword",
+                                                                "textLength": 12
+                                                            },
                                                             "modifiers": null,
                                                             "questionToken": null,
-                                                            "typeDeclarationList": null,
+                                                            "typeDeclarationList": {
+                                                                "QualifiedNameList": {
+                                                                    "children": [
+                                                                        {
+                                                                            "kind": "StringReservedWord",
+                                                                            "textLength": 6
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
                                                             "byRefToken": null,
                                                             "dotDotDotToken": null,
                                                             "variableName": {
                                                                 "kind": "VariableName",
-                                                                "textLength": 8
+                                                                "textLength": 6
                                                             },
                                                             "equalsToken": null,
                                                             "default": null
@@ -83,20 +98,73 @@
                                                     {
                                                         "Parameter": {
                                                             "attributes": null,
-                                                            "visibilityToken": null,
-                                                            "setVisibilityToken": null,
+                                                            "visibilityToken": {
+                                                                "kind": "PublicKeyword",
+                                                                "textLength": 6
+                                                            },
+                                                            "setVisibilityToken": {
+                                                                "kind": "ProtectedSetKeyword",
+                                                                "textLength": 14
+                                                            },
                                                             "modifiers": null,
                                                             "questionToken": null,
-                                                            "typeDeclarationList": null,
+                                                            "typeDeclarationList": {
+                                                                "QualifiedNameList": {
+                                                                    "children": [
+                                                                        {
+                                                                            "kind": "StringReservedWord",
+                                                                            "textLength": 6
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
                                                             "byRefToken": null,
                                                             "dotDotDotToken": null,
                                                             "variableName": {
                                                                 "kind": "VariableName",
-                                                                "textLength": 6
+                                                                "textLength": 7
                                                             },
                                                             "equalsToken": null,
                                                             "default": null
                                                         }
+                                                    },
+                                                    {
+                                                        "kind": "CommaToken",
+                                                        "textLength": 1
+                                                    },
+                                                    {
+                                                        "Parameter": {
+                                                            "attributes": null,
+                                                            "visibilityToken": {
+                                                                "kind": "PublicKeyword",
+                                                                "textLength": 6
+                                                            },
+                                                            "setVisibilityToken": null,
+                                                            "modifiers": null,
+                                                            "questionToken": null,
+                                                            "typeDeclarationList": {
+                                                                "QualifiedNameList": {
+                                                                    "children": [
+                                                                        {
+                                                                            "kind": "StringReservedWord",
+                                                                            "textLength": 6
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "byRefToken": null,
+                                                            "dotDotDotToken": null,
+                                                            "variableName": {
+                                                                "kind": "VariableName",
+                                                                "textLength": 4
+                                                            },
+                                                            "equalsToken": null,
+                                                            "default": null
+                                                        }
+                                                    },
+                                                    {
+                                                        "kind": "CommaToken",
+                                                        "textLength": 1
                                                     }
                                                 ]
                                             }

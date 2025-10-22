@@ -65,6 +65,7 @@
                                                                 "kind": "PublicKeyword",
                                                                 "textLength": 6
                                                             },
+                                                            "setVisibilityToken": null,
                                                             "modifiers": [
                                                                 {
                                                                     "kind": "ProtectedKeyword",
