@@ -72,8 +72,14 @@ Monitor RFCs merged into php-src and mirror the token/grammar changes:
     - `final readonly string $prop` - With readonly
     - `public readonly final string $prop` - All modifiers combined
   - Tested in `tests/cases/parser85/final-promotion-*.php` (5 comprehensive tests)
-- **Attributes on constants / extended attribute targets**: verify attributes on constants and traits are preserved.
-- **Extend `#[\Override]` to properties / `#[\NoDiscard]` / `#[\DelayedTargetValidation]`**: attributes already parse, but add regression coverage to ensure tolerant does not misclassify their targets.
+- **Extended attribute targets** (`#[Deprecated] const FOO = 1;`): ✅ **COMPLETE**
+  - Added support for attributes on global constants (PHP 8.5+)
+  - Updated Parser.php to include `TokenKind::ConstKeyword` in allowed attribute targets
+  - Added `attributes` field to `ConstDeclaration` node
+  - Added `ConstDeclaration` to instanceof check for attaching attributes
+  - Verified attributes on class constants still work correctly
+  - Verified `#[Override]` on properties works correctly (PHP 8.5+)
+  - Tested in `tests/cases/parser85/attributes-*.php` and `tests/cases/parser85/override-on-property.php`
 - Track any additional keywords (`with`, operator tokens, etc.) and update `TokenKind.php` / `TokenStringMaps.php` accordingly.
 
 ### Diagnostics & Node Mapping
@@ -111,6 +117,7 @@ Recommended sample inputs for AST diffs (update as new fixtures are added):
 | Pipe operator | `tests/cases/parser85/pipe-operator-*.php` | 8.5 | ✅ | `php ~/phan/tools/dump_ast.php --json …` | `php tools/PrintTolerantAst.php …`, `php ~/phan/internal/dump_fallback_ast.php --php-ast …` |
 | Clone with modifications | `tests/cases/parser85/clone-*.php` | 8.5 | ✅ | (run after `sudo newphp 85`) | same as above |
 | Final property promotion | `tests/cases/parser85/final-promotion-*.php` | 8.5 | ✅ | (run after `sudo newphp 85`) | same as above |
+| Extended attribute targets | `tests/cases/parser85/attributes-*.php`, `tests/cases/parser85/override-on-property.php` | 8.5 | ✅ | (run after `sudo newphp 85`) | same as above |
 
 ## Completed Work Summary
 
@@ -118,16 +125,14 @@ As of October 2025, the tolerant parser now has full support for:
 
 - **PHP 8.3**: Dynamic class constant fetch, typed class constants (including union types)
 - **PHP 8.4**: Property hooks (with modifiers and edge cases), asymmetric visibility, new without parenthesis, deprecation fixes
-- **PHP 8.5**: Pipe operator, clone with property modifications, final property promotion
+- **PHP 8.5**: Pipe operator, clone with property modifications, final property promotion, extended attribute targets
 
-**Test Coverage**: 31,463 tests passing across all PHP versions (8.1-8.5)
+**Test Coverage**: 31,468 tests passing across all PHP versions (8.1-8.5)
 **CI Configuration**: Updated to test on PHP 8.1, 8.2, 8.3, 8.4, 8.5.0RC1-cli
 
 ## Next Steps
 
-Remaining PHP 8.5 features to implement:
-
-1. **Extended attribute targets** - Verify attributes work on new targets (constants, properties, etc.)
+All major PHP 8.3, 8.4, and 8.5 features are now implemented! ✅
 
 Additional tasks:
 

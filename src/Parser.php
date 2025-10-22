@@ -758,8 +758,8 @@ class Parser {
             // Create an interface element or a MissingMemberDeclaration
             $statement = $this->parseInterfaceElementFn()($parentNode);
         } else {
-            // Classlikes, anonymous functions, global functions, and arrow functions can have attributes. Global constants cannot.
-            if (in_array($this->token->kind, [TokenKind::ReadonlyKeyword, TokenKind::ClassKeyword, TokenKind::TraitKeyword, TokenKind::InterfaceKeyword, TokenKind::AbstractKeyword, TokenKind::FinalKeyword, TokenKind::FunctionKeyword, TokenKind::FnKeyword, TokenKind::EnumKeyword], true) ||
+            // Classlikes, anonymous functions, global functions, arrow functions, and global constants (PHP 8.5+) can have attributes.
+            if (in_array($this->token->kind, [TokenKind::ReadonlyKeyword, TokenKind::ClassKeyword, TokenKind::TraitKeyword, TokenKind::InterfaceKeyword, TokenKind::AbstractKeyword, TokenKind::FinalKeyword, TokenKind::FunctionKeyword, TokenKind::FnKeyword, TokenKind::EnumKeyword, TokenKind::ConstKeyword], true) ||
                 $this->token->kind === TokenKind::StaticKeyword && $this->lookahead([TokenKind::FunctionKeyword, TokenKind::FnKeyword])) {
                 $statement = $this->parseStatement($parentNode);
             } else {
@@ -778,6 +778,7 @@ class Parser {
             $statement instanceof InterfaceDeclaration ||
             $statement instanceof ClassConstDeclaration ||
             $statement instanceof PropertyDeclaration ||
+            $statement instanceof ConstDeclaration ||
             $statement instanceof MissingDeclaration ||
             $statement instanceof MissingMemberDeclaration) {
 
