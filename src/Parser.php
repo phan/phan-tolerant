@@ -1586,6 +1586,9 @@ class Parser {
             // readonly-modifier
             case TokenKind::ReadonlyKeyword:
 
+            // final-modifier (PHP 8.5+)
+            case TokenKind::FinalKeyword:
+
                 return true;
         }
         return false;
@@ -1660,6 +1663,8 @@ class Parser {
                 case TokenKind::PublicKeyword:
                 case TokenKind::ProtectedKeyword:
                 case TokenKind::PrivateKeyword:
+                case TokenKind::ReadonlyKeyword:
+                case TokenKind::FinalKeyword:
                 case TokenKind::AttributeToken:
 
                 // dnf types (A&B)|C
