@@ -3321,6 +3321,11 @@ class Parser {
             $objectCreationExpression->classMembers = $this->parseClassMembers($objectCreationExpression);
         }
 
+        // PHP 8.4: new without parenthesis - allow chaining directly after new expression
+        if ($this->getCurrentToken()->kind === TokenKind::ArrowToken) {
+            return $this->parsePostfixExpressionRest($objectCreationExpression);
+        }
+
         return $objectCreationExpression;
     }
 
