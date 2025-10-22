@@ -3079,7 +3079,8 @@ class Parser {
             $expression instanceof SubscriptExpression ||
             $expression instanceof ScopedPropertyAccessExpression ||
             $expression instanceof StringLiteral ||
-            $expression instanceof ArrayCreationExpression
+            $expression instanceof ArrayCreationExpression ||
+            $expression instanceof ObjectCreationExpression
         )) {
             return $expression;
         }
