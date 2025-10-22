@@ -228,7 +228,10 @@ class Parser {
 
             // Check if this /* appears after a // on the same line
             // Get the line containing the /* by looking back to the last newline
-            $lastNewline = strrpos($sourceFile->fileContents, "\n", $commentStart - strlen($sourceFile->fileContents) - 1);
+            // Clamp the offset to avoid ValueError when $commentStart is near the beginning
+            $offset = $commentStart - strlen($sourceFile->fileContents) - 1;
+            $offset = max($offset, -strlen($sourceFile->fileContents));
+            $lastNewline = strrpos($sourceFile->fileContents, "\n", $offset);
             $lineStart = $lastNewline !== false ? $lastNewline + 1 : 0;
             $currentLine = substr($sourceFile->fileContents, $lineStart, $commentStart - $lineStart + 2); // +2 to include /*
 
