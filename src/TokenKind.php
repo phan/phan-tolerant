@@ -94,6 +94,7 @@ class TokenKind {
     const HaltCompilerKeyword = 173;
     const PrivateSetKeyword = 174;
     const ProtectedSetKeyword = 175;
+    const PublicSetKeyword = 176;
 
     const OpenBracketToken = 201;
     const CloseBracketToken = 202;

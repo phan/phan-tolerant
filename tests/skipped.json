@@ -64,5 +64,10 @@
     "void_parameter.php",
 
     "programStructure13.php",
-    "programStructure21.php"
+    "programStructure21.php",
+
+    "storage_duration-AfterAv1Reinit.php",
+    "storage_duration-AfterSv1Init.php",
+    "storage_duration-AfterSv2Init.php",
+    "storage_duration-AfterSv3Init.php"
 ]

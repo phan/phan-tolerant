@@ -153,7 +153,10 @@ class Parser {
             TokenKind::FloatReservedWord, TokenKind::IntReservedWord, TokenKind::StringReservedWord,
             TokenKind::ObjectReservedWord, TokenKind::NullReservedWord, TokenKind::FalseReservedWord,
             TokenKind::TrueReservedWord, TokenKind::IterableReservedWord, TokenKind::MixedReservedWord,
-            TokenKind::VoidReservedWord, TokenKind::NeverReservedWord]; // TODO update spec
+            TokenKind::VoidReservedWord, TokenKind::NeverReservedWord,
+            // Legacy type aliases (invalid in actual code, but parser should accept them for error recovery)
+            TokenKind::BooleanReservedWord, TokenKind::IntegerReservedWord, TokenKind::DoubleReservedWord,
+            TokenKind::RealReservedWord, TokenKind::BinaryReservedWord]; // TODO update spec
         $this->returnTypeDeclarationTokens = \array_merge([TokenKind::StaticKeyword], $this->parameterTypeDeclarationTokens);
     }
 
@@ -204,9 +207,53 @@ class Parser {
         $this->sourceFile->endOfFileToken = $this->eat1(TokenKind::EndOfFileToken);
         $this->advanceToken();
 
+        // Check for unterminated comments in the trivia before EOF
+        $this->checkForUnterminatedComment($sourceFile);
+
         $sourceFile->parent = null;
 
         return $sourceFile;
+    }
+
+    private function checkForUnterminatedComment($sourceFile) {
+        // Check if the trivia before EOF contains an unterminated /* or /** comment
+        $eofToken = $sourceFile->endOfFileToken;
+        $trivia = substr($sourceFile->fileContents, $eofToken->fullStart, $eofToken->start - $eofToken->fullStart);
+
+        // Look for /* or /** that doesn't have a matching */
+        // We need to make sure it's not inside a single-line comment
+        if (preg_match('/\/\*\*?(?:(?!\*\/).)*$/s', $trivia, $matches, PREG_OFFSET_CAPTURE)) {
+            // Found potential unterminated comment - verify it's not in a // comment
+            $commentStart = $eofToken->fullStart + $matches[0][1];
+
+            // Check if this /* appears after a // on the same line
+            // Get the line containing the /* by looking back to the last newline
+            // Clamp the offset to avoid ValueError when $commentStart is near the beginning
+            $offset = $commentStart - strlen($sourceFile->fileContents) - 1;
+            $offset = max($offset, -strlen($sourceFile->fileContents));
+            $lastNewline = strrpos($sourceFile->fileContents, "\n", $offset);
+            $lineStart = $lastNewline !== false ? $lastNewline + 1 : 0;
+            $currentLine = substr($sourceFile->fileContents, $lineStart, $commentStart - $lineStart + 2); // +2 to include /*
+
+            // If there's a // before /* on the same line, it's inside a single-line comment
+            $doubleSlashPos = strpos($currentLine, '//');
+            $slashStarPos = strpos($currentLine, '/*');
+            if ($doubleSlashPos !== false && $doubleSlashPos < $slashStarPos) {
+                return; // The /* is inside a // comment
+            }
+
+            $commentText = $matches[0][0];
+
+            // Find the line number where the comment starts
+            $lineNumber = 1 + substr_count(substr($sourceFile->fileContents, 0, $commentStart), "\n");
+
+            $sourceFile->unterminatedCommentDiagnostic = new Diagnostic(
+                DiagnosticKind::Error,
+                "Unterminated comment starting line $lineNumber",
+                $commentStart,
+                strlen($commentText)
+            );
+        }
     }
 
     private function reset() {
@@ -664,6 +711,10 @@ class Parser {
                 case TokenKind::UseKeyword:
                     return $this->parseTraitUseClause($parentNode);
 
+                case TokenKind::CaseKeyword:
+                    // enum case in a class - error but parse for recovery
+                    return $this->parseEnumCaseDeclaration($parentNode);
+
                 case TokenKind::AttributeToken:
                     return $this->parseAttributeStatement($parentNode);
 
@@ -857,7 +908,7 @@ class Parser {
             // PHP 8.5+ allows final/readonly to precede visibility, so we need to parse all modifiers first
             // then extract visibility from the modifiers list
             $parameter->visibilityToken = $this->eatOptional([TokenKind::PublicKeyword, TokenKind::ProtectedKeyword, TokenKind::PrivateKeyword]);
-            $parameter->setVisibilityToken = $this->eatOptional([TokenKind::ProtectedSetKeyword, TokenKind::PrivateSetKeyword]);
+            $parameter->setVisibilityToken = $this->eatOptional([TokenKind::PublicSetKeyword, TokenKind::ProtectedSetKeyword, TokenKind::PrivateSetKeyword]);
             $parameter->modifiers = $this->parseParameterModifiers() ?: null;
 
             // If visibilityToken is null but we have modifiers, check if there's a visibility modifier
@@ -886,6 +937,16 @@ class Parser {
                 if (end($children) instanceof MissingToken && ($children[\count($children) - 2]->kind ?? null) === TokenKind::AmpersandToken) {
                     array_pop($parameter->typeDeclarationList->children);
                     $parameter->byRefToken = array_pop($parameter->typeDeclarationList->children);
+                }
+                // Check for invalid ?Type|OtherType syntax (nullable with union types)
+                if ($parameter->questionToken) {
+                    foreach ($children as $index => $child) {
+                        if ($child instanceof Token && $child->kind === TokenKind::BarToken) {
+                            // Mark the BarToken as a SkippedToken to generate a diagnostic error
+                            $parameter->typeDeclarationList->children[$index] = new SkippedToken($child);
+                            break;
+                        }
+                    }
                 }
             } elseif ($parameter->questionToken) {
                 // TODO ParameterType?
@@ -1097,6 +1158,9 @@ class Parser {
 
             case TokenKind::UseKeyword:
 
+            // case (enum case in class - error but accept for recovery)
+            case TokenKind::CaseKeyword:
+
             // attributes
             case TokenKind::AttributeToken:
                 return true;
@@ -1204,6 +1268,9 @@ class Parser {
                 // yield-expression
                 case TokenKind::YieldKeyword:
                 case TokenKind::YieldFromKeyword:
+
+                // throw-expression (PHP 8.0+)
+                case TokenKind::ThrowKeyword:
 
                 // object-creation-expression
                 case TokenKind::NewKeyword:
@@ -1584,6 +1651,11 @@ class Parser {
             case TokenKind::ProtectedKeyword:
             case TokenKind::PrivateKeyword:
 
+            // asymmetric visibility (PHP 8.4+)
+            case TokenKind::PrivateSetKeyword:
+            case TokenKind::ProtectedSetKeyword:
+            case TokenKind::PublicSetKeyword:
+
             // static-modifier
             case TokenKind::StaticKeyword:
 
@@ -1687,6 +1759,11 @@ class Parser {
                 case TokenKind::ReadonlyKeyword:
                 case TokenKind::FinalKeyword:
                 case TokenKind::AttributeToken:
+
+                // asymmetric visibility (PHP 8.4+)
+                case TokenKind::PublicSetKeyword:
+                case TokenKind::ProtectedSetKeyword:
+                case TokenKind::PrivateSetKeyword:
 
                 // dnf types (A&B)|C
                 case TokenKind::OpenParenToken:
@@ -3349,7 +3426,12 @@ class Parser {
         }
 
         // PHP 8.4: new without parenthesis - allow chaining directly after new expression
-        if ($this->getCurrentToken()->kind === TokenKind::ArrowToken) {
+        $tokenKind = $this->getCurrentToken()->kind;
+        if ($tokenKind === TokenKind::ArrowToken ||
+            $tokenKind === TokenKind::QuestionArrowToken ||
+            $tokenKind === TokenKind::OpenBracketToken ||
+            $tokenKind === TokenKind::OpenParenToken ||
+            $tokenKind === TokenKind::ColonColonToken) {
             return $this->parsePostfixExpressionRest($objectCreationExpression);
         }
 
@@ -3510,7 +3592,16 @@ class Parser {
         $propertyDeclaration = new PropertyDeclaration();
         $propertyDeclaration->parent = $parentNode;
 
-        $propertyDeclaration->modifiers = $modifiers;
+        // Extract setVisibilityToken from modifiers (PHP 8.4+)
+        $filteredModifiers = [];
+        foreach ($modifiers as $modifier) {
+            if ($modifier->kind === TokenKind::PublicSetKeyword || $modifier->kind === TokenKind::PrivateSetKeyword || $modifier->kind === TokenKind::ProtectedSetKeyword) {
+                $propertyDeclaration->setVisibilityToken = $modifier;
+            } else {
+                $filteredModifiers[] = $modifier;
+            }
+        }
+        $propertyDeclaration->modifiers = $filteredModifiers ?: null;
         $propertyDeclaration->questionToken = $questionToken;
         if ($typeDeclarationList) {
             $propertyDeclaration->typeDeclarationList = $typeDeclarationList;
@@ -3648,6 +3739,9 @@ class Parser {
             $hook->arrowToken = $this->eat1(TokenKind::DoubleArrowToken);
             $hook->expression = $this->parseExpression($hook);
             $hook->semicolon = $this->eatOptional1(TokenKind::SemicolonToken) ?? new MissingToken(TokenKind::SemicolonToken, $this->getCurrentToken()->fullStart);
+        } elseif ($this->checkToken(TokenKind::SemicolonToken)) {
+            // Abstract hook (interface or abstract class)
+            $hook->semicolon = $this->eat1(TokenKind::SemicolonToken);
         } else {
             $hook->compoundStatement = $this->parseCompoundStatement($hook);
         }
@@ -3727,7 +3821,43 @@ class Parser {
 
             case TokenKind::FunctionKeyword:
 
+            // trait use (not allowed but parse for error recovery)
+            case TokenKind::UseKeyword:
+
             case TokenKind::AttributeToken:
+
+            // PHP 8.4: interface property hooks without explicit visibility
+            case TokenKind::QuestionToken:  // nullable type: ?Foo $bar
+            case TokenKind::VariableName:   // no type: $bar
+
+            // Type tokens that can start a property declaration
+            case TokenKind::Name:           // qualified names: Foo $bar
+            case TokenKind::BackslashToken: // fully qualified: \Foo $bar
+            case TokenKind::NamespaceKeyword: // relative: namespace\Foo $bar
+            case TokenKind::OpenParenToken: // DNF types: (A&B)|C $bar
+
+            // Built-in type keywords
+            case TokenKind::ArrayKeyword:
+            case TokenKind::CallableKeyword:
+            case TokenKind::BoolReservedWord:
+            case TokenKind::FloatReservedWord:
+            case TokenKind::IntReservedWord:
+            case TokenKind::StringReservedWord:
+            case TokenKind::ObjectReservedWord:
+            case TokenKind::NullReservedWord:
+            case TokenKind::FalseReservedWord:
+            case TokenKind::TrueReservedWord:
+            case TokenKind::IterableReservedWord:
+            case TokenKind::MixedReservedWord:
+            case TokenKind::VoidReservedWord:
+            case TokenKind::NeverReservedWord:
+
+            // Legacy type aliases (for error recovery)
+            case TokenKind::BooleanReservedWord:
+            case TokenKind::IntegerReservedWord:
+            case TokenKind::DoubleReservedWord:
+            case TokenKind::RealReservedWord:
+            case TokenKind::BinaryReservedWord:
                 return true;
         }
         return false;
@@ -3745,14 +3875,28 @@ class Parser {
                 case TokenKind::FunctionKeyword:
                     return $this->parseMethodDeclaration($parentNode, $modifiers);
 
+                case TokenKind::QuestionToken:
+                    // PHP 8.4: property hooks in interfaces
+                    return $this->parseRemainingPropertyDeclarationOrMissingMemberDeclaration(
+                        $parentNode,
+                        $modifiers,
+                        $this->eat1(TokenKind::QuestionToken)
+                    );
+
+                case TokenKind::VariableName:
+                    // PHP 8.4: property hooks in interfaces
+                    return $this->parsePropertyDeclaration($parentNode, $modifiers);
+
+                case TokenKind::UseKeyword:
+                    // Trait use in interface - not allowed in PHP but parse for error recovery
+                    return $this->parseTraitUseClause($parentNode);
+
                 case TokenKind::AttributeToken:
                     return $this->parseAttributeStatement($parentNode);
 
                 default:
-                    $missingInterfaceMemberDeclaration = new MissingMemberDeclaration();
-                    $missingInterfaceMemberDeclaration->parent = $parentNode;
-                    $missingInterfaceMemberDeclaration->modifiers = $modifiers;
-                    return $missingInterfaceMemberDeclaration;
+                    // PHP 8.4: property hooks in interfaces - handle type declarations
+                    return $this->parseRemainingPropertyDeclarationOrMissingMemberDeclaration($parentNode, $modifiers);
             }
         };
     }

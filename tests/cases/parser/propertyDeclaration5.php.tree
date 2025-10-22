@@ -46,6 +46,7 @@
                                                 "textLength": 6
                                             }
                                         ],
+                                        "setVisibilityToken": null,
                                         "questionToken": null,
                                         "typeDeclarationList": null,
                                         "propertyElements": {
