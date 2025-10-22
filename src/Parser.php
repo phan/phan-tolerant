@@ -3079,7 +3079,8 @@ class Parser {
             $expression instanceof SubscriptExpression ||
             $expression instanceof ScopedPropertyAccessExpression ||
             $expression instanceof StringLiteral ||
-            $expression instanceof ArrayCreationExpression
+            $expression instanceof ArrayCreationExpression ||
+            $expression instanceof ObjectCreationExpression
         )) {
             return $expression;
         }
@@ -3319,6 +3320,11 @@ class Parser {
 
         if ($this->getCurrentToken()->kind === TokenKind::OpenBraceToken) {
             $objectCreationExpression->classMembers = $this->parseClassMembers($objectCreationExpression);
+        }
+
+        // PHP 8.4: new without parenthesis - allow chaining directly after new expression
+        if ($this->getCurrentToken()->kind === TokenKind::ArrowToken) {
+            return $this->parsePostfixExpressionRest($objectCreationExpression);
         }
 
         return $objectCreationExpression;
