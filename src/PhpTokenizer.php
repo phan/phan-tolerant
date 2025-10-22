@@ -252,7 +252,17 @@ class PhpTokenizer implements TokenStreamProviderInterface {
                     }
                     // fall through
                 default:
-                    $newTokenKind = self::TOKEN_MAP[$tokenKind] ?? TokenKind::Unknown;
+                    $newTokenKind = self::TOKEN_MAP[$tokenKind] ?? null;
+                    // Handle PHP 8.4+ asymmetric visibility tokens
+                    if ($newTokenKind === null) {
+                        if ($tokenKind === 327 && defined('T_PRIVATE_SET') && T_PRIVATE_SET === 327) {
+                            $newTokenKind = TokenKind::PrivateSetKeyword;
+                        } elseif ($tokenKind === 328 && defined('T_PROTECTED_SET') && T_PROTECTED_SET === 328) {
+                            $newTokenKind = TokenKind::ProtectedSetKeyword;
+                        } else {
+                            $newTokenKind = TokenKind::Unknown;
+                        }
+                    }
                     $arr[] = new Token($newTokenKind, $fullStart, $start, $pos - $fullStart);
                     $start = $fullStart = $pos;
                     break;
@@ -345,9 +355,7 @@ class PhpTokenizer implements TokenStreamProviderInterface {
         T_LOGICAL_OR => TokenKind::OrKeyword,
         T_PRINT => TokenKind::PrintKeyword,
         T_PRIVATE => TokenKind::PrivateKeyword,
-        327 => TokenKind::PrivateSetKeyword, // T_PRIVATE_SET (PHP 8.4+)
         T_PROTECTED => TokenKind::ProtectedKeyword,
-        328 => TokenKind::ProtectedSetKeyword, // T_PROTECTED_SET (PHP 8.4+)
         T_PUBLIC => TokenKind::PublicKeyword,
         T_READONLY => TokenKind::ReadonlyKeyword,
         T_REQUIRE => TokenKind::RequireKeyword,
