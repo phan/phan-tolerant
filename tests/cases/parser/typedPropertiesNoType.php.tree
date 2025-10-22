@@ -42,6 +42,7 @@
                                                 "textLength": 6
                                             }
                                         ],
+                                        "setVisibilityToken": null,
                                         "questionToken": {
                                             "kind": "QuestionToken",
                                             "textLength": 1

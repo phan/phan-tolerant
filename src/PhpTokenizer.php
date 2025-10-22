@@ -259,6 +259,8 @@ class PhpTokenizer implements TokenStreamProviderInterface {
                             $newTokenKind = TokenKind::PrivateSetKeyword;
                         } elseif ($tokenKind === 328 && defined('T_PROTECTED_SET') && T_PROTECTED_SET === 328) {
                             $newTokenKind = TokenKind::ProtectedSetKeyword;
+                        } elseif ($tokenKind === 329 && defined('T_PUBLIC_SET') && T_PUBLIC_SET === 329) {
+                            $newTokenKind = TokenKind::PublicSetKeyword;
                         } else {
                             $newTokenKind = TokenKind::Unknown;
                         }

@@ -46,6 +46,7 @@
                                                 "textLength": 8
                                             }
                                         ],
+                                        "setVisibilityToken": null,
                                         "questionToken": null,
                                         "typeDeclarationList": {
                                             "QualifiedNameList": {
@@ -136,6 +137,7 @@
                                                 "textLength": 8
                                             }
                                         ],
+                                        "setVisibilityToken": null,
                                         "questionToken": {
                                             "kind": "QuestionToken",
                                             "textLength": 1
