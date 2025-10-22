@@ -61,5 +61,8 @@
     "traits23.php",
 
     "core_predefined_constants2.php",
-    "void_parameter.php"
+    "void_parameter.php",
+
+    "programStructure13.php",
+    "programStructure21.php"
 ]
