@@ -853,10 +853,30 @@ class Parser {
             }
             // Note that parameter modifiers are allowed to be repeated by the parser in php 8.1 (it is a compiler error)
             //
-            // TODO: Remove the visibilityToken in a future backwards incompatible release
+            // PHP 8.5+ allows final/readonly to precede visibility, so we need to parse all modifiers first
+            // then extract visibility from the modifiers list
             $parameter->visibilityToken = $this->eatOptional([TokenKind::PublicKeyword, TokenKind::ProtectedKeyword, TokenKind::PrivateKeyword]);
             $parameter->setVisibilityToken = $this->eatOptional([TokenKind::ProtectedSetKeyword, TokenKind::PrivateSetKeyword]);
             $parameter->modifiers = $this->parseParameterModifiers() ?: null;
+
+            // If visibilityToken is null but we have modifiers, check if there's a visibility modifier
+            // in the modifiers array (e.g., for "final public" where final comes first)
+            if ($parameter->visibilityToken === null && $parameter->modifiers) {
+                foreach ($parameter->modifiers as $index => $modifier) {
+                    if (in_array($modifier->kind, [TokenKind::PublicKeyword, TokenKind::ProtectedKeyword, TokenKind::PrivateKeyword], true)) {
+                        $parameter->visibilityToken = $modifier;
+                        // Remove from modifiers array to avoid duplication
+                        array_splice($parameter->modifiers, $index, 1);
+                        // Re-index the array
+                        $parameter->modifiers = array_values($parameter->modifiers);
+                        break;
+                    }
+                }
+                // If modifiers is now empty, set to null
+                if (empty($parameter->modifiers)) {
+                    $parameter->modifiers = null;
+                }
+            }
 
             $parameter->questionToken = $this->eatOptional1(TokenKind::QuestionToken);
             $parameter->typeDeclarationList = $this->tryParseParameterTypeDeclarationList($parameter);
