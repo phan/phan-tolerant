@@ -17,7 +17,18 @@
                         "kind": "NamespaceKeyword",
                         "textLength": 9
                     },
-                    "name": null,
+                    "name": {
+                        "QualifiedName": {
+                            "globalSpecifier": null,
+                            "relativeSpecifier": null,
+                            "nameParts": [
+                                {
+                                    "kind": "Name",
+                                    "textLength": 6
+                                }
+                            ]
+                        }
+                    },
                     "compoundStatementOrSemicolon": {
                         "kind": "SemicolonToken",
                         "textLength": 1

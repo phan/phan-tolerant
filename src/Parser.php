@@ -132,6 +132,7 @@ class Parser {
     private $nameOrKeywordOrReservedWordTokens;
     private $nameOrReservedWordTokens;
     private $nameOrStaticOrReservedWordTokens;
+    private $nameOrKeywordOrReservedWordTokensExceptNamespace;
     private $reservedWordTokens;
     private $keywordTokens;
     private $argumentStartTokensSet;
@@ -148,6 +149,10 @@ class Parser {
         $this->nameOrKeywordOrReservedWordTokens = \array_merge([TokenKind::Name], $this->keywordTokens, $this->reservedWordTokens);
         $this->nameOrReservedWordTokens = \array_merge([TokenKind::Name], $this->reservedWordTokens);
         $this->nameOrStaticOrReservedWordTokens = \array_merge([TokenKind::Name, TokenKind::StaticKeyword], $this->reservedWordTokens);
+        $this->nameOrKeywordOrReservedWordTokensExceptNamespace = \array_values(\array_diff(
+            $this->nameOrKeywordOrReservedWordTokens,
+            [TokenKind::NamespaceKeyword]
+        ));
         $this->parameterTypeDeclarationTokens =
             [TokenKind::ArrayKeyword, TokenKind::CallableKeyword, TokenKind::BoolReservedWord,
             TokenKind::FloatReservedWord, TokenKind::IntReservedWord, TokenKind::StringReservedWord,
@@ -1872,23 +1877,13 @@ class Parser {
                     DelimitedList\QualifiedNameParts::class,
                     TokenKind::BackslashToken,
                     function ($token) {
-                        // a\static() <- INVALID (but not checked for right now)
-                        // new a\static() <- INVALID
-                        // new static() <- VALID
-                        // a\static\b <- INVALID
-                        // a\function <- INVALID
-                        // a\true\b <-VALID
-                        // a\b\true <-VALID
-                        // a\static::b <-VALID
-                        // TODO more tests
-                        return $this->lookahead(TokenKind::BackslashToken)
-                            ? in_array($token->kind, $this->nameOrReservedWordTokens)
-                            : in_array($token->kind, $this->nameOrStaticOrReservedWordTokens);
+                        if ($token->kind === TokenKind::NamespaceKeyword) {
+                            return false;
+                        }
+                        return \in_array($token->kind, $this->nameOrKeywordOrReservedWordTokensExceptNamespace, true);
                     },
                     function ($parentNode) {
-                        $name = $this->lookahead(TokenKind::BackslashToken)
-                            ? $this->eat($this->nameOrReservedWordTokens)
-                            : $this->eat($this->nameOrStaticOrReservedWordTokens); // TODO support keyword name
+                        $name = $this->eat($this->nameOrKeywordOrReservedWordTokensExceptNamespace); // TODO support keyword name
                         $name->kind = TokenKind::Name; // bool/true/null/static should not be treated as keywords in this case
                         return $name;
                     }, $node);
@@ -3929,8 +3924,10 @@ class Parser {
             $namespaceDefinition->compoundStatementOrSemicolon = $this->parseCompoundStatement($namespaceDefinition);
         } else {
             if (!$namespaceDefinition->name) {
-                // only optional with compound statement block
-                $namespaceDefinition->name = new MissingToken(TokenKind::QualifiedName, $this->token->fullStart);
+                if (!$this->checkToken(TokenKind::SemicolonToken)) {
+                    // name is only optional when followed by a semicolon (global namespace)
+                    $namespaceDefinition->name = new MissingToken(TokenKind::QualifiedName, $this->token->fullStart);
+                }
             }
             $namespaceDefinition->compoundStatementOrSemicolon = $this->eatSemicolonOrAbortStatement();
         }
