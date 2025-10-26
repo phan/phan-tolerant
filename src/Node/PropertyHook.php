@@ -6,6 +6,7 @@
 
 namespace Microsoft\PhpParser\Node;
 
+use Microsoft\PhpParser\FunctionLike;
 use Microsoft\PhpParser\ModifiedTypeInterface;
 use Microsoft\PhpParser\ModifiedTypeTrait;
 use Microsoft\PhpParser\Node;
@@ -13,7 +14,7 @@ use Microsoft\PhpParser\Node\DelimitedList\ParameterDeclarationList;
 use Microsoft\PhpParser\Node\Statement\CompoundStatementNode;
 use Microsoft\PhpParser\Token;
 
-class PropertyHook extends Node implements ModifiedTypeInterface {
+class PropertyHook extends Node implements ModifiedTypeInterface, FunctionLike {
     use ModifiedTypeTrait;
     /** @var AttributeGroup[]|null */
     public $attributes;
