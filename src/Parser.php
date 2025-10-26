@@ -2316,6 +2316,7 @@ class Parser {
             // the original operator, and the newly constructed exponentiation-expression as the operand.
             $shouldOperatorTakePrecedenceOverUnary = false;
             switch ($token->kind) {
+                case TokenKind::OpenBraceToken:
                 case TokenKind::AsteriskAsteriskToken:
                     $shouldOperatorTakePrecedenceOverUnary = $leftOperand instanceof UnaryExpression;
                     break;
@@ -3185,6 +3186,11 @@ class Parser {
             $expression instanceof ArrayCreationExpression ||
             $expression instanceof ObjectCreationExpression
         )) {
+            return $expression;
+        }
+
+        // property hooks ...
+        if ($tokenKind === TokenKind::OpenBraceToken) {
             return $expression;
         }
         if ($tokenKind === TokenKind::ColonColonToken) {
