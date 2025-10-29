@@ -7,3 +7,4 @@ tests/output
 .*.swp
 .*.swo
 .phpunit.result.cache
+CLAUDE.md
