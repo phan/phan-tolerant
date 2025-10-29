@@ -3199,6 +3199,14 @@ class Parser {
 
         if ($tokenKind === TokenKind::OpenBraceToken ||
             $tokenKind === TokenKind::OpenBracketToken) {
+            // Property hooks: don't parse `{` after certain expression types
+            // as those are property hook lists, not subscript expressions
+            if ($tokenKind === TokenKind::OpenBraceToken &&
+                ($expression instanceof StringLiteral ||
+                 $expression instanceof ArrayCreationExpression ||
+                 $expression instanceof ObjectCreationExpression)) {
+                return $expression;
+            }
             $expression = $this->parseSubscriptExpression($expression);
             return $this->parsePostfixExpressionRest($expression);
         }
