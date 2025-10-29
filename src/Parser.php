@@ -1322,6 +1322,7 @@ class Parser {
                 case TokenKind::IntegerLiteralToken:
 
                 case TokenKind::StringLiteralToken:
+                case TokenKind::EncapsedAndWhitespace:
 
                 case TokenKind::SingleQuoteToken:
                 case TokenKind::DoubleQuoteToken:
@@ -1415,6 +1416,7 @@ class Parser {
                 return $this->parseNumericLiteralExpression($parentNode);
 
             case TokenKind::StringLiteralToken:
+            case TokenKind::EncapsedAndWhitespace:
                 return $this->parseStringLiteralExpression($parentNode);
 
             case TokenKind::DoubleQuoteToken:
@@ -2311,6 +2313,7 @@ class Parser {
             // the original operator, and the newly constructed exponentiation-expression as the operand.
             $shouldOperatorTakePrecedenceOverUnary = false;
             switch ($token->kind) {
+                case TokenKind::OpenBraceToken:
                 case TokenKind::AsteriskAsteriskToken:
                     $shouldOperatorTakePrecedenceOverUnary = $leftOperand instanceof UnaryExpression;
                     break;
@@ -2823,7 +2826,7 @@ class Parser {
                     TokenKind::InvalidOctalLiteralToken,
                     TokenKind::InvalidHexadecimalLiteral,
                     TokenKind::InvalidBinaryLiteral,
-                    TokenKind::StringLiteralToken
+                    TokenKind::StringLiteralToken,
                 ); // TODO simplify
 
             return $declareDirective;
@@ -3182,6 +3185,7 @@ class Parser {
         )) {
             return $expression;
         }
+
         if ($tokenKind === TokenKind::ColonColonToken) {
             $expression = $this->parseScopedPropertyAccessExpression($expression, null);
             return $this->parsePostfixExpressionRest($expression);
@@ -3191,6 +3195,14 @@ class Parser {
 
         if ($tokenKind === TokenKind::OpenBraceToken ||
             $tokenKind === TokenKind::OpenBracketToken) {
+            // Property hooks: don't parse `{` after certain expression types
+            // as those are property hook lists, not subscript expressions
+            if ($tokenKind === TokenKind::OpenBraceToken &&
+                ($expression instanceof StringLiteral ||
+                 $expression instanceof ArrayCreationExpression ||
+                 $expression instanceof ObjectCreationExpression)) {
+                return $expression;
+            }
             $expression = $this->parseSubscriptExpression($expression);
             return $this->parsePostfixExpressionRest($expression);
         }
