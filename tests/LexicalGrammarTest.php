@@ -11,47 +11,30 @@ use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\BaseTestListener;
 use PHPUnit\Framework\AssertionFailedError;
 
-require_once __DIR__ . '/CallbackTestListener.php';
-
 class LexicalGrammarTest extends TestCase {
-    private $expectedTokensFile;
-    private $tokens;
-    const FILE_PATTERN = __DIR__ . "/cases/lexical/*";
-    public function run(?TestResult $result = null) : TestResult {
-        if (!isset($GLOBALS["GIT_CHECKOUT_LEXER"])) {
-            $GLOBALS["GIT_CHECKOUT_LEXER"] = true;
-            exec("git -C " . dirname(self::FILE_PATTERN) . " checkout *.php.tokens");
-        }
-
-        $result->addListener(new CallbackTestListener(function (Test $test) {
-            if (isset($test->expectedTokensFile) && isset($test->tokens)) {
-                file_put_contents($test->expectedTokensFile, str_replace("\r\n", "\n", $test->tokens));
-            }
-        }));
-
-        $result = parent::run($result);
-        return $result;
-    }
-
-
     /**
      * @dataProvider lexicalProvider
      */
     public function testOutputTokenClassificationAndLength($testCaseFile, $expectedTokensFile) {
         $fileContents = file_get_contents($testCaseFile);
-        if (!file_exists($expectedTokensFile)) {
-            file_put_contents($expectedTokensFile, $fileContents);
-            exec("git add " . $expectedTokensFile);
-        }
 
-        $expectedTokens = str_replace("\r\n", "\n", file_get_contents($expectedTokensFile));
         $lexer = \Microsoft\PhpParser\TokenStreamProviderFactory::GetTokenStreamProvider($fileContents);
         $GLOBALS["SHORT_TOKEN_SERIALIZE"] = true;
         $tokens = str_replace("\r\n", "\n", json_encode($lexer->getTokensArray(), JSON_PRETTY_PRINT));
         $GLOBALS["SHORT_TOKEN_SERIALIZE"] = false;
-        $this->expectedTokensFile = $expectedTokensFile;
-        $this->tokens = $tokens;
-        $this->assertEquals($expectedTokens, $tokens, "input: $testCaseFile\r\nexpected: $expectedTokensFile");
+
+        if (!file_exists($expectedTokensFile)) {
+            file_put_contents($expectedTokensFile, $tokens);
+            self::markTestSkipped('Snapshot generated');
+        }
+
+        $expectedTokens = str_replace("\r\n", "\n", file_get_contents($expectedTokensFile));
+
+        $this->assertEquals(
+            $expectedTokens,
+            $tokens,
+            "input: $testCaseFile\r\nexpected: $expectedTokensFile (delete expected to regenerate)"
+        );
     }
 
     public function lexicalProvider() {
