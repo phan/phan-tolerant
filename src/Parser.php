@@ -3186,10 +3186,6 @@ class Parser {
             return $expression;
         }
 
-        // property hooks ...
-        if ($tokenKind === TokenKind::OpenBraceToken) {
-            return $expression;
-        }
         if ($tokenKind === TokenKind::ColonColonToken) {
             $expression = $this->parseScopedPropertyAccessExpression($expression, null);
             return $this->parsePostfixExpressionRest($expression);
