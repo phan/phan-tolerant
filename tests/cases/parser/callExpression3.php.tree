@@ -36,6 +36,7 @@
                                                 "name": null,
                                                 "colonToken": null,
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "AssignmentExpression": {
                                                         "leftOperand": {

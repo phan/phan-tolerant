@@ -52,6 +52,7 @@
                                                                 "textLength": 1
                                                             },
                                                             "dotDotDotToken": null,
+                                                            "questionToken": null,
                                                             "expression": {
                                                                 "StringLiteral": {
                                                                     "startQuote": null,

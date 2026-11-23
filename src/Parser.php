@@ -146,6 +146,7 @@ class Parser {
         $this->argumentStartTokensSet = \array_flip(TokenStringMaps::KEYWORDS);
         unset($this->argumentStartTokensSet[TokenKind::YieldFromKeyword]);
         $this->argumentStartTokensSet[TokenKind::DotDotDotToken] = '...';
+        $this->argumentStartTokensSet[TokenKind::QuestionToken] = '?';
         $this->nameOrKeywordOrReservedWordTokens = \array_merge([TokenKind::Name], $this->keywordTokens, $this->reservedWordTokens);
         $this->nameOrReservedWordTokens = \array_merge([TokenKind::Name], $this->reservedWordTokens);
         $this->nameOrStaticOrReservedWordTokens = \array_merge([TokenKind::Name, TokenKind::StaticKeyword], $this->reservedWordTokens);
@@ -1147,6 +1148,11 @@ class Parser {
             case TokenKind::ProtectedKeyword:
             case TokenKind::PrivateKeyword:
 
+            // asymmetric visibility without a read modifier (php 8.4): `protected(set) string $x;`
+            case TokenKind::PrivateSetKeyword:
+            case TokenKind::ProtectedSetKeyword:
+            case TokenKind::PublicSetKeyword:
+
             // static-modifier
             case TokenKind::StaticKeyword:
 
@@ -1355,6 +1361,8 @@ class Parser {
                 case TokenKind::ObjectCastToken:
                 case TokenKind::StringCastToken:
                 case TokenKind::UnsetCastToken:
+            case TokenKind::VoidCastToken:
+                case TokenKind::VoidCastToken:
                 case TokenKind::MatchKeyword:
 
                 // anonymous-function-creation-expression
@@ -2185,6 +2193,7 @@ class Parser {
             case TokenKind::ObjectCastToken:
             case TokenKind::StringCastToken:
             case TokenKind::UnsetCastToken:
+            case TokenKind::VoidCastToken:
                 return $this->parseCastExpression($parentNode);
 
             case TokenKind::OpenParenToken:
@@ -3181,7 +3190,9 @@ class Parser {
             $expression instanceof ScopedPropertyAccessExpression ||
             $expression instanceof StringLiteral ||
             $expression instanceof ArrayCreationExpression ||
-            $expression instanceof ObjectCreationExpression
+            $expression instanceof ObjectCreationExpression ||
+            // The constants null, true and false: `null?->x`, `TRUE->prop`
+            $expression instanceof ReservedWord
         )) {
             return $expression;
         }
@@ -3207,10 +3218,7 @@ class Parser {
             return $this->parsePostfixExpressionRest($expression);
         }
 
-        if ($expression instanceof ArrayCreationExpression) {
-            // Remaining postfix expressions are invalid, so abort
-            return $expression;
-        }
+        // (An array literal can be dereferenced and called: `[0, 1]->prop`, `['A', 'm']()`, `[$o, 'm'](...)`)
 
         if ($tokenKind === TokenKind::ArrowToken || $tokenKind === TokenKind::QuestionArrowToken) {
             $expression = $this->parseMemberAccessExpression($expression);
@@ -3285,10 +3293,30 @@ class Parser {
                 $argumentExpression->colonToken = $this->eat1(TokenKind::ColonToken);
             } else {
                 $argumentExpression->dotDotDotToken = $this->eatOptional1(TokenKind::DotDotDotToken);
+                if ($argumentExpression->dotDotDotToken && $this->isArgumentListDelimiter($this->token)) {
+                    // The variadic placeholder of first-class callable syntax and partial function application: `f(...)`, `f(1, ...)`
+                    return $argumentExpression;
+                }
+            }
+            if ($this->token->kind === TokenKind::QuestionToken && !$argumentExpression->dotDotDotToken) {
+                $afterQuestion = $this->lexer->getTokensArray()[$this->lexer->getCurrentPosition()] ?? null;
+                if ($afterQuestion && $this->isArgumentListDelimiter($afterQuestion)) {
+                    // The placeholder of partial function application (php 8.6): `f(?, 2)`, `f(b: ?)`
+                    $argumentExpression->questionToken = $this->eat1(TokenKind::QuestionToken);
+                    return $argumentExpression;
+                }
             }
             $argumentExpression->expression = $this->parseExpression($argumentExpression);
             return $argumentExpression;
         };
+    }
+
+    /**
+     * @param Token $token
+     * @return bool whether the token ends an argument: `,` or `)`
+     */
+    private function isArgumentListDelimiter($token) {
+        return $token->kind === TokenKind::CommaToken || $token->kind === TokenKind::CloseParenToken;
     }
 
     private function parseCallExpressionRest($expression) {
@@ -4396,7 +4424,8 @@ class Parser {
             TokenKind::IntCastToken,
             TokenKind::ObjectCastToken,
             TokenKind::StringCastToken,
-            TokenKind::UnsetCastToken
+            TokenKind::UnsetCastToken,
+            TokenKind::VoidCastToken
         );
 
         $castExpression->operand = $this->parseUnaryExpressionOrHigher($castExpression);
@@ -4569,7 +4598,9 @@ class Parser {
         $cloneExpression->cloneKeyword = $this->eat1(TokenKind::CloneKeyword);
 
         // PHP 8.5: clone can now be used like a function: clone($obj, ["prop" => $val])
-        if ($this->getCurrentToken()->kind === TokenKind::OpenParenToken) {
+        // Without a second argument, `clone (...)` is the traditional syntax with a parenthesized expression,
+        // which may continue after the parentheses: `clone ($a)->b`, `clone ($a)[0]`.
+        if ($this->getCurrentToken()->kind === TokenKind::OpenParenToken && $this->isParenthesizedListWithComma()) {
             $cloneExpression->openParen = $this->eat1(TokenKind::OpenParenToken);
             $cloneExpression->expression = $this->parseExpression($cloneExpression);
 
@@ -4586,6 +4617,41 @@ class Parser {
         }
 
         return $cloneExpression;
+    }
+
+    /**
+     * @return bool whether the current token `(` starts a parenthesized list with a comma that is not nested: `(a, b)`
+     */
+    private function isParenthesizedListWithComma(): bool {
+        $tokens = $this->lexer->getTokensArray();
+        $depth = 0;
+        // The current token was already read, so the lexer position is the token after it.
+        for ($i = $this->lexer->getCurrentPosition() - 1, $n = \count($tokens); $i < $n; $i++) {
+            switch ($tokens[$i]->kind) {
+                case TokenKind::OpenParenToken:
+                case TokenKind::OpenBracketToken:
+                case TokenKind::OpenBraceToken:
+                case TokenKind::DollarOpenBraceToken:
+                case TokenKind::OpenBraceDollarToken:
+                case TokenKind::AttributeToken:
+                    $depth++;
+                    break;
+                case TokenKind::CloseParenToken:
+                case TokenKind::CloseBracketToken:
+                case TokenKind::CloseBraceToken:
+                    $depth--;
+                    if ($depth <= 0) {
+                        return false;
+                    }
+                    break;
+                case TokenKind::CommaToken:
+                    if ($depth === 1) {
+                        return true;
+                    }
+                    break;
+            }
+        }
+        return false;
     }
 
     private function eatSemicolonOrAbortStatement() {

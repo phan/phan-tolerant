@@ -36,6 +36,7 @@
                                                 "name": null,
                                                 "colonToken": null,
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "AssignmentExpression": {
                                                         "leftOperand": {
@@ -76,6 +77,7 @@
                                                     "kind": "DotDotDotToken",
                                                     "textLength": 3
                                                 },
+                                                "questionToken": null,
                                                 "expression": {
                                                     "Variable": {
                                                         "dollar": null,

@@ -39,6 +39,7 @@
                                                 "name": null,
                                                 "colonToken": null,
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "ReservedWord": {
                                                         "children": {
@@ -58,6 +59,7 @@
                                                 "name": null,
                                                 "colonToken": null,
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "ReservedWord": {
                                                         "children": {
@@ -77,6 +79,7 @@
                                                 "name": null,
                                                 "colonToken": null,
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "ReservedWord": {
                                                         "children": {

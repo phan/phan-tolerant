@@ -184,25 +184,31 @@
                                         "kind": "CloneKeyword",
                                         "textLength": 5
                                     },
-                                    "openParen": {
-                                        "kind": "OpenParenToken",
-                                        "textLength": 1
-                                    },
+                                    "openParen": null,
                                     "expression": {
-                                        "Variable": {
-                                            "dollar": null,
-                                            "name": {
-                                                "kind": "VariableName",
-                                                "textLength": 4
+                                        "ParenthesizedExpression": {
+                                            "openParen": {
+                                                "kind": "OpenParenToken",
+                                                "textLength": 1
+                                            },
+                                            "expression": {
+                                                "Variable": {
+                                                    "dollar": null,
+                                                    "name": {
+                                                        "kind": "VariableName",
+                                                        "textLength": 4
+                                                    }
+                                                }
+                                            },
+                                            "closeParen": {
+                                                "kind": "CloseParenToken",
+                                                "textLength": 1
                                             }
                                         }
                                     },
                                     "commaToken": null,
                                     "modifications": null,
-                                    "closeParen": {
-                                        "kind": "CloseParenToken",
-                                        "textLength": 1
-                                    }
+                                    "closeParen": null
                                 }
                             }
                         }

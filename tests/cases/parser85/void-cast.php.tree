@@ -1,0 +1,242 @@
+{
+    "SourceFileNode": {
+        "statementList": [
+            {
+                "InlineHtml": {
+                    "scriptSectionEndTag": null,
+                    "text": null,
+                    "scriptSectionStartTag": {
+                        "kind": "ScriptSectionStartTag",
+                        "textLength": 6
+                    }
+                }
+            },
+            {
+                "FunctionDeclaration": {
+                    "attributes": null,
+                    "functionKeyword": {
+                        "kind": "FunctionKeyword",
+                        "textLength": 8
+                    },
+                    "byRefToken": null,
+                    "name": {
+                        "kind": "Name",
+                        "textLength": 1
+                    },
+                    "openParen": {
+                        "kind": "OpenParenToken",
+                        "textLength": 1
+                    },
+                    "parameters": null,
+                    "closeParen": {
+                        "kind": "CloseParenToken",
+                        "textLength": 1
+                    },
+                    "colonToken": {
+                        "kind": "ColonToken",
+                        "textLength": 1
+                    },
+                    "questionToken": null,
+                    "returnTypeList": {
+                        "QualifiedNameList": {
+                            "children": [
+                                {
+                                    "kind": "IntReservedWord",
+                                    "textLength": 3
+                                }
+                            ]
+                        }
+                    },
+                    "compoundStatementOrSemicolon": {
+                        "CompoundStatementNode": {
+                            "openBrace": {
+                                "kind": "OpenBraceToken",
+                                "textLength": 1
+                            },
+                            "statements": [
+                                {
+                                    "ReturnStatement": {
+                                        "returnKeyword": {
+                                            "kind": "ReturnKeyword",
+                                            "textLength": 6
+                                        },
+                                        "expression": {
+                                            "NumericLiteral": {
+                                                "children": {
+                                                    "kind": "IntegerLiteralToken",
+                                                    "textLength": 1
+                                                }
+                                            }
+                                        },
+                                        "semicolon": {
+                                            "kind": "SemicolonToken",
+                                            "textLength": 1
+                                        }
+                                    }
+                                }
+                            ],
+                            "closeBrace": {
+                                "kind": "CloseBraceToken",
+                                "textLength": 1
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "ExpressionStatement": {
+                    "expression": {
+                        "CastExpression": {
+                            "openParen": null,
+                            "castType": {
+                                "kind": "VoidCastToken",
+                                "textLength": 6
+                            },
+                            "closeParen": null,
+                            "operand": {
+                                "CallExpression": {
+                                    "callableExpression": {
+                                        "QualifiedName": {
+                                            "globalSpecifier": null,
+                                            "relativeSpecifier": null,
+                                            "nameParts": [
+                                                {
+                                                    "kind": "Name",
+                                                    "textLength": 1
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "openParen": {
+                                        "kind": "OpenParenToken",
+                                        "textLength": 1
+                                    },
+                                    "argumentExpressionList": null,
+                                    "closeParen": {
+                                        "kind": "CloseParenToken",
+                                        "textLength": 1
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "semicolon": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    }
+                }
+            },
+            {
+                "ExpressionStatement": {
+                    "expression": {
+                        "CastExpression": {
+                            "openParen": null,
+                            "castType": {
+                                "kind": "VoidCastToken",
+                                "textLength": 6
+                            },
+                            "closeParen": null,
+                            "operand": {
+                                "ArrayCreationExpression": {
+                                    "arrayKeyword": null,
+                                    "openParenOrBracket": {
+                                        "kind": "OpenBracketToken",
+                                        "textLength": 1
+                                    },
+                                    "arrayElements": {
+                                        "ArrayElementList": {
+                                            "children": [
+                                                {
+                                                    "ArrayElement": {
+                                                        "elementKey": null,
+                                                        "arrowToken": null,
+                                                        "byRef": null,
+                                                        "dotDotDot": null,
+                                                        "elementValue": {
+                                                            "CallExpression": {
+                                                                "callableExpression": {
+                                                                    "QualifiedName": {
+                                                                        "globalSpecifier": null,
+                                                                        "relativeSpecifier": null,
+                                                                        "nameParts": [
+                                                                            {
+                                                                                "kind": "Name",
+                                                                                "textLength": 1
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "openParen": {
+                                                                    "kind": "OpenParenToken",
+                                                                    "textLength": 1
+                                                                },
+                                                                "argumentExpressionList": null,
+                                                                "closeParen": {
+                                                                    "kind": "CloseParenToken",
+                                                                    "textLength": 1
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "kind": "CommaToken",
+                                                    "textLength": 1
+                                                },
+                                                {
+                                                    "ArrayElement": {
+                                                        "elementKey": null,
+                                                        "arrowToken": null,
+                                                        "byRef": null,
+                                                        "dotDotDot": null,
+                                                        "elementValue": {
+                                                            "CallExpression": {
+                                                                "callableExpression": {
+                                                                    "QualifiedName": {
+                                                                        "globalSpecifier": null,
+                                                                        "relativeSpecifier": null,
+                                                                        "nameParts": [
+                                                                            {
+                                                                                "kind": "Name",
+                                                                                "textLength": 1
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "openParen": {
+                                                                    "kind": "OpenParenToken",
+                                                                    "textLength": 1
+                                                                },
+                                                                "argumentExpressionList": null,
+                                                                "closeParen": {
+                                                                    "kind": "CloseParenToken",
+                                                                    "textLength": 1
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "closeParenOrBracket": {
+                                        "kind": "CloseBracketToken",
+                                        "textLength": 1
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "semicolon": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "textLength": 0
+        }
+    }
+}

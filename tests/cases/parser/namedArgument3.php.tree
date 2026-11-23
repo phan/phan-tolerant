@@ -45,6 +45,7 @@
                                                     "textLength": 1
                                                 },
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "ReservedWord": {
                                                         "children": {
@@ -105,6 +106,7 @@
                                                     "textLength": 1
                                                 },
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "NumericLiteral": {
                                                         "children": {
@@ -165,6 +167,7 @@
                                                     "textLength": 1
                                                 },
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "NumericLiteral": {
                                                         "children": {
@@ -224,6 +227,7 @@
                                                     "textLength": 1
                                                 },
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "error": "MissingToken",
                                                     "kind": "Expression",

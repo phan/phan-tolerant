@@ -135,6 +135,7 @@
                                                 "name": null,
                                                 "colonToken": null,
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "Variable": {
                                                         "dollar": null,
@@ -155,6 +156,7 @@
                                                 "name": null,
                                                 "colonToken": null,
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "Variable": {
                                                         "dollar": null,

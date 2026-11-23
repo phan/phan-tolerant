@@ -20,13 +20,23 @@ class ArgumentExpression extends Expression {
     /** @var Token|null */
     public $dotDotDotToken;
 
-    /** @var Expression|MissingToken|null for first-class callable syntax */
+    /**
+     * @var Token|null the placeholder `?` of partial function application (php 8.6): `f(?, 2)`, `f(b: ?)`.
+     * If this is set, dotDotDotToken and expression will not be set.
+     */
+    public $questionToken;
+
+    /**
+     * @var Expression|MissingToken|null
+     * Null for the placeholders of first-class callable syntax and partial function application: `f(...)`, `f(1, ...)`, `f(?)`.
+     */
     public $expression;
 
     const CHILD_NAMES = [
         'name',
         'colonToken',
         'dotDotDotToken',
+        'questionToken',
         'expression'
     ];
 }

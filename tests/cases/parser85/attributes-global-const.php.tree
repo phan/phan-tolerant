@@ -126,6 +126,7 @@
                                                                         "name": null,
                                                                         "colonToken": null,
                                                                         "dotDotDotToken": null,
+                                                                        "questionToken": null,
                                                                         "expression": {
                                                                             "StringLiteral": {
                                                                                 "startQuote": null,
@@ -430,6 +431,7 @@
                                                                             "textLength": 1
                                                                         },
                                                                         "dotDotDotToken": null,
+                                                                        "questionToken": null,
                                                                         "expression": {
                                                                             "StringLiteral": {
                                                                                 "startQuote": null,
@@ -457,6 +459,7 @@
                                                                             "textLength": 1
                                                                         },
                                                                         "dotDotDotToken": null,
+                                                                        "questionToken": null,
                                                                         "expression": {
                                                                             "NumericLiteral": {
                                                                                 "children": {

@@ -39,6 +39,7 @@
                                                 "name": null,
                                                 "colonToken": null,
                                                 "dotDotDotToken": null,
+                                                "questionToken": null,
                                                 "expression": {
                                                     "NumericLiteral": {
                                                         "children": {

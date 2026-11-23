@@ -848,6 +848,7 @@
                                                                                         "name": null,
                                                                                         "colonToken": null,
                                                                                         "dotDotDotToken": null,
+                                                                                        "questionToken": null,
                                                                                         "expression": {
                                                                                             "StringLiteral": {
                                                                                                 "startQuote": null,
@@ -1139,6 +1140,7 @@
                                                                                         "name": null,
                                                                                         "colonToken": null,
                                                                                         "dotDotDotToken": null,
+                                                                                        "questionToken": null,
                                                                                         "expression": {
                                                                                             "CallExpression": {
                                                                                                 "callableExpression": {
@@ -1165,6 +1167,7 @@
                                                                                                                     "name": null,
                                                                                                                     "colonToken": null,
                                                                                                                     "dotDotDotToken": null,
+                                                                                                                    "questionToken": null,
                                                                                                                     "expression": {
                                                                                                                         "StringLiteral": {
                                                                                                                             "startQuote": null,
@@ -1784,6 +1787,7 @@
                                                                                                             "name": null,
                                                                                                             "colonToken": null,
                                                                                                             "dotDotDotToken": null,
+                                                                                                            "questionToken": null,
                                                                                                             "expression": {
                                                                                                                 "ReservedWord": {
                                                                                                                     "children": {
