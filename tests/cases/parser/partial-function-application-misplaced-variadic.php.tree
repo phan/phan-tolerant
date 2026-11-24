@@ -274,6 +274,94 @@
                         "textLength": 1
                     }
                 }
+            },
+            {
+                "ExpressionStatement": {
+                    "expression": {
+                        "AssignmentExpression": {
+                            "leftOperand": {
+                                "Variable": {
+                                    "dollar": null,
+                                    "name": {
+                                        "kind": "VariableName",
+                                        "textLength": 2
+                                    }
+                                }
+                            },
+                            "operator": {
+                                "kind": "EqualsToken",
+                                "textLength": 1
+                            },
+                            "byRef": null,
+                            "rightOperand": {
+                                "CallExpression": {
+                                    "callableExpression": {
+                                        "QualifiedName": {
+                                            "globalSpecifier": null,
+                                            "relativeSpecifier": null,
+                                            "nameParts": [
+                                                {
+                                                    "kind": "Name",
+                                                    "textLength": 1
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "openParen": {
+                                        "kind": "OpenParenToken",
+                                        "textLength": 1
+                                    },
+                                    "argumentExpressionList": {
+                                        "ArgumentExpressionList": {
+                                            "children": [
+                                                {
+                                                    "ArgumentExpression": {
+                                                        "name": null,
+                                                        "colonToken": null,
+                                                        "dotDotDotToken": {
+                                                            "kind": "DotDotDotToken",
+                                                            "textLength": 3
+                                                        },
+                                                        "questionToken": null,
+                                                        "expression": null
+                                                    }
+                                                },
+                                                {
+                                                    "kind": "CommaToken",
+                                                    "textLength": 1
+                                                },
+                                                {
+                                                    "ArgumentExpression": {
+                                                        "name": null,
+                                                        "colonToken": null,
+                                                        "dotDotDotToken": null,
+                                                        "questionToken": null,
+                                                        "expression": {
+                                                            "NumericLiteral": {
+                                                                "children": {
+                                                                    "kind": "IntegerLiteralToken",
+                                                                    "textLength": 1
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "closeParen": {
+                                        "kind": "CloseParenToken",
+                                        "textLength": 1
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "semicolon": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    }
+                }
             }
         ],
         "endOfFileToken": {

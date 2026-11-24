@@ -3629,16 +3629,13 @@ class Parser {
         $propertyDeclaration = new PropertyDeclaration();
         $propertyDeclaration->parent = $parentNode;
 
-        // Extract setVisibilityToken from modifiers (PHP 8.4+)
-        $filteredModifiers = [];
+        // The set visibility (PHP 8.4+) stays in the modifiers, in source order: `public(set) readonly int $x;`
         foreach ($modifiers as $modifier) {
             if ($modifier->kind === TokenKind::PublicSetKeyword || $modifier->kind === TokenKind::PrivateSetKeyword || $modifier->kind === TokenKind::ProtectedSetKeyword) {
                 $propertyDeclaration->setVisibilityToken = $modifier;
-            } else {
-                $filteredModifiers[] = $modifier;
             }
         }
-        $propertyDeclaration->modifiers = $filteredModifiers ?: null;
+        $propertyDeclaration->modifiers = $modifiers ?: null;
         $propertyDeclaration->questionToken = $questionToken;
         if ($typeDeclarationList) {
             $propertyDeclaration->typeDeclarationList = $typeDeclarationList;

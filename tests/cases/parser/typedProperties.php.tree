@@ -46,7 +46,6 @@
                                                 "textLength": 6
                                             }
                                         ],
-                                        "setVisibilityToken": null,
                                         "questionToken": {
                                             "kind": "QuestionToken",
                                             "textLength": 1
@@ -108,7 +107,6 @@
                                                 "textLength": 7
                                             }
                                         ],
-                                        "setVisibilityToken": null,
                                         "questionToken": null,
                                         "typeDeclarationList": {
                                             "QualifiedNameList": {
@@ -169,7 +167,6 @@
                                                 "textLength": 6
                                             }
                                         ],
-                                        "setVisibilityToken": null,
                                         "questionToken": null,
                                         "typeDeclarationList": {
                                             "QualifiedNameList": {
@@ -237,7 +234,6 @@
                                                 "textLength": 6
                                             }
                                         ],
-                                        "setVisibilityToken": null,
                                         "questionToken": null,
                                         "typeDeclarationList": {
                                             "QualifiedNameList": {

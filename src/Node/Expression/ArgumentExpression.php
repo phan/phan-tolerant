@@ -67,7 +67,7 @@ class ArgumentExpression extends Expression {
                     DiagnosticKind::Error,
                     $sibling->isVariadicPlaceholder() ? 'Variadic placeholder may only appear once' : 'Variadic placeholder must be last',
                     $this->dotDotDotToken->start,
-                    $this->dotDotDotToken->length
+                    $this->dotDotDotToken->length - ($this->dotDotDotToken->start - $this->dotDotDotToken->fullStart)
                 );
             }
         }
