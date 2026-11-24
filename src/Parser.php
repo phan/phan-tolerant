@@ -4434,7 +4434,10 @@ class Parser {
             TokenKind::VoidCastToken
         );
 
-        $castExpression->operand = $this->parseUnaryExpressionOrHigher($castExpression);
+        // `(void)` is a statement that takes a whole expression: `(void) $x = f();`, `(void) f() + g();`
+        $castExpression->operand = $castExpression->castType->kind === TokenKind::VoidCastToken
+            ? $this->parseExpression($castExpression)
+            : $this->parseUnaryExpressionOrHigher($castExpression);
 
         return $castExpression;
     }
