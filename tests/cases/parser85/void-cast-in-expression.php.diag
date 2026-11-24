@@ -1,0 +1,38 @@
+[
+    {
+        "kind": 0,
+        "message": "Unexpected '(void)'",
+        "start": 11,
+        "length": 6
+    },
+    {
+        "kind": 0,
+        "message": "Unexpected '(void)'",
+        "start": 25,
+        "length": 6
+    },
+    {
+        "kind": 0,
+        "message": "Unexpected '(void)'",
+        "start": 43,
+        "length": 6
+    },
+    {
+        "kind": 0,
+        "message": "Unexpected '(void)'",
+        "start": 77,
+        "length": 6
+    },
+    {
+        "kind": 0,
+        "message": "Unexpected '(void)'",
+        "start": 98,
+        "length": 6
+    },
+    {
+        "kind": 0,
+        "message": "Unexpected '(void)'",
+        "start": 153,
+        "length": 6
+    }
+]

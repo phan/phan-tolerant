@@ -20,6 +20,8 @@ define(__NAMESPACE__ . '\T_ENUM', defined('T_ENUM') ? constant('T_ENUM') : 'T_EN
 define(__NAMESPACE__ . '\T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') ? constant('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') : 'T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG');
 define(__NAMESPACE__ . '\T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') ? constant('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') : 'T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG');
 define(__NAMESPACE__ . '\T_READONLY', defined('T_READONLY') ? constant('T_READONLY') : 'T_READONLY');
+// If this predates PHP 8.5, T_VOID_CAST is unavailable.
+define(__NAMESPACE__ . '\T_VOID_CAST', defined('T_VOID_CAST') ? constant('T_VOID_CAST') : 'T_VOID_CAST');
 
 /**
  * Tokenizes content using PHP's built-in `token_get_all`, and converts to "lightweight" Token representation.
@@ -467,6 +469,7 @@ class PhpTokenizer implements TokenStreamProviderInterface {
         T_OBJECT_CAST       => TokenKind::ObjectCastToken,
         T_STRING_CAST       => TokenKind::StringCastToken,
         T_UNSET_CAST        => TokenKind::UnsetCastToken,
+        T_VOID_CAST         => TokenKind::VoidCastToken,
 
         T_START_HEREDOC     => TokenKind::HeredocStart,
         T_END_HEREDOC       => TokenKind::HeredocEnd,

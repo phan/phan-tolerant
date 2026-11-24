@@ -6,7 +6,7 @@
 
 namespace Microsoft\PhpParser\Node\Statement;
 
-use Microsoft\PhpParser\Node\Expression;
+use Microsoft\PhpParser\Node\DelimitedList\ExpressionList;
 use Microsoft\PhpParser\Node\StatementNode;
 use Microsoft\PhpParser\Token;
 
@@ -15,15 +15,15 @@ class ForStatement extends StatementNode {
     public $for;
     /** @var Token */
     public $openParen;
-    /** @var Expression|null */
+    /** @var ExpressionList|null */
     public $forInitializer;
     /** @var Token */
     public $exprGroupSemicolon1;
-    /** @var Expression|null */
+    /** @var ExpressionList|null */
     public $forControl;
     /** @var Token */
     public $exprGroupSemicolon2;
-    /** @var Expression|null */
+    /** @var ExpressionList|null */
     public $forEndOfLoop;
     /** @var Token */
     public $closeParen;

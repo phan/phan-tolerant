@@ -74,6 +74,7 @@
                                                                     "kind": "DotDotDotToken",
                                                                     "textLength": 3
                                                                 },
+                                                                "questionToken": null,
                                                                 "expression": null
                                                             }
                                                         }

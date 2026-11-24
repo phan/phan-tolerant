@@ -40,12 +40,12 @@
                                             {
                                                 "kind": "PublicKeyword",
                                                 "textLength": 6
+                                            },
+                                            {
+                                                "kind": "PublicSetKeyword",
+                                                "textLength": 11
                                             }
                                         ],
-                                        "setVisibilityToken": {
-                                            "kind": "PublicSetKeyword",
-                                            "textLength": 11
-                                        },
                                         "questionToken": null,
                                         "typeDeclarationList": {
                                             "QualifiedNameList": {
@@ -92,12 +92,12 @@
                                             {
                                                 "kind": "PublicKeyword",
                                                 "textLength": 6
+                                            },
+                                            {
+                                                "kind": "PublicSetKeyword",
+                                                "textLength": 11
                                             }
                                         ],
-                                        "setVisibilityToken": {
-                                            "kind": "PublicSetKeyword",
-                                            "textLength": 11
-                                        },
                                         "questionToken": null,
                                         "typeDeclarationList": {
                                             "QualifiedNameList": {
@@ -284,12 +284,12 @@
                                             {
                                                 "kind": "PublicKeyword",
                                                 "textLength": 6
+                                            },
+                                            {
+                                                "kind": "PublicSetKeyword",
+                                                "textLength": 11
                                             }
                                         ],
-                                        "setVisibilityToken": {
-                                            "kind": "PublicSetKeyword",
-                                            "textLength": 11
-                                        },
                                         "questionToken": null,
                                         "typeDeclarationList": {
                                             "QualifiedNameList": {
@@ -352,12 +352,12 @@
                                             {
                                                 "kind": "PublicKeyword",
                                                 "textLength": 6
+                                            },
+                                            {
+                                                "kind": "PublicSetKeyword",
+                                                "textLength": 11
                                             }
                                         ],
-                                        "setVisibilityToken": {
-                                            "kind": "PublicSetKeyword",
-                                            "textLength": 11
-                                        },
                                         "questionToken": {
                                             "kind": "QuestionToken",
                                             "textLength": 1

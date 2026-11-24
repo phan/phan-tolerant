@@ -58,11 +58,8 @@
                                                             "kind": "DotDotDotToken",
                                                             "textLength": 3
                                                         },
-                                                        "expression": {
-                                                            "error": "MissingToken",
-                                                            "kind": "Expression",
-                                                            "textLength": 0
-                                                        }
+                                                        "questionToken": null,
+                                                        "expression": null
                                                     }
                                                 },
                                                 {
@@ -74,6 +71,7 @@
                                                         "name": null,
                                                         "colonToken": null,
                                                         "dotDotDotToken": null,
+                                                        "questionToken": null,
                                                         "expression": {
                                                             "NumericLiteral": {
                                                                 "children": {

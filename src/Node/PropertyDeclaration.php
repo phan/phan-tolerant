@@ -20,7 +20,10 @@ class PropertyDeclaration extends Node implements ModifiedTypeInterface {
     /** @var AttributeGroup[]|null */
     public $attributes;
 
-    /** @var Token|null asymmetric visibility for set operations (PHP 8.4+) */
+    /**
+     * @var Token|null asymmetric visibility for set operations (PHP 8.4+).
+     * This token is also an element of $modifiers (where it is in source order), so it is not in CHILD_NAMES.
+     */
     public $setVisibilityToken;
 
     /** @var Token|null question token for PHP 7.4 type declaration */
@@ -38,7 +41,6 @@ class PropertyDeclaration extends Node implements ModifiedTypeInterface {
     const CHILD_NAMES = [
         'attributes',
         'modifiers',
-        'setVisibilityToken',
         'questionToken',
         'typeDeclarationList',
         'propertyElements',

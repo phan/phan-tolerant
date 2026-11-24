@@ -223,6 +223,8 @@ class TokenKind {
     const DoubleCastToken = 413;
     const BoolCastToken = 414;
     const ArrayCastToken = 415;
+    /** The `(void)` cast of php 8.5 */
+    const VoidCastToken = 430;
     const IntegerLiteralToken = 416;
     const CommentToken = 417;
     const DocCommentToken = 418;

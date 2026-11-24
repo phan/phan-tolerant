@@ -75,6 +75,7 @@
                                                                     "name": null,
                                                                     "colonToken": null,
                                                                     "dotDotDotToken": null,
+                                                                    "questionToken": null,
                                                                     "expression": {
                                                                         "BinaryExpression": {
                                                                             "leftOperand": {

@@ -118,6 +118,7 @@
                                                                     "name": null,
                                                                     "colonToken": null,
                                                                     "dotDotDotToken": null,
+                                                                    "questionToken": null,
                                                                     "expression": {
                                                                         "StringLiteral": {
                                                                             "startQuote": null,
@@ -139,6 +140,7 @@
                                                                     "name": null,
                                                                     "colonToken": null,
                                                                     "dotDotDotToken": null,
+                                                                    "questionToken": null,
                                                                     "expression": {
                                                                         "Variable": {
                                                                             "dollar": null,
@@ -326,6 +328,7 @@
                                                                                                         "kind": "DotDotDotToken",
                                                                                                         "textLength": 3
                                                                                                     },
+                                                                                                    "questionToken": null,
                                                                                                     "expression": null
                                                                                                 }
                                                                                             }
@@ -421,6 +424,7 @@
                                                                                                             "name": null,
                                                                                                             "colonToken": null,
                                                                                                             "dotDotDotToken": null,
+                                                                                                            "questionToken": null,
                                                                                                             "expression": {
                                                                                                                 "StringLiteral": {
                                                                                                                     "startQuote": null,
@@ -442,6 +446,7 @@
                                                                                                             "name": null,
                                                                                                             "colonToken": null,
                                                                                                             "dotDotDotToken": null,
+                                                                                                            "questionToken": null,
                                                                                                             "expression": {
                                                                                                                 "Variable": {
                                                                                                                     "dollar": null,
@@ -495,6 +500,7 @@
                                                                                                                 "kind": "DotDotDotToken",
                                                                                                                 "textLength": 3
                                                                                                             },
+                                                                                                            "questionToken": null,
                                                                                                             "expression": null
                                                                                                         }
                                                                                                     }
@@ -589,6 +595,7 @@
                                                                                                                 "kind": "DotDotDotToken",
                                                                                                                 "textLength": 3
                                                                                                             },
+                                                                                                            "questionToken": null,
                                                                                                             "expression": null
                                                                                                         }
                                                                                                     }
@@ -688,6 +695,7 @@
                                                                                                                     "name": null,
                                                                                                                     "colonToken": null,
                                                                                                                     "dotDotDotToken": null,
+                                                                                                                    "questionToken": null,
                                                                                                                     "expression": {
                                                                                                                         "CallExpression": {
                                                                                                                             "callableExpression": {
@@ -717,6 +725,7 @@
                                                                                                                                                     "kind": "DotDotDotToken",
                                                                                                                                                     "textLength": 3
                                                                                                                                                 },
+                                                                                                                                                "questionToken": null,
                                                                                                                                                 "expression": null
                                                                                                                                             }
                                                                                                                                         }
@@ -740,6 +749,7 @@
                                                                                                                     "name": null,
                                                                                                                     "colonToken": null,
                                                                                                                     "dotDotDotToken": null,
+                                                                                                                    "questionToken": null,
                                                                                                                     "expression": {
                                                                                                                         "Variable": {
                                                                                                                             "dollar": null,
@@ -851,6 +861,7 @@
                                                                                                             "name": null,
                                                                                                             "colonToken": null,
                                                                                                             "dotDotDotToken": null,
+                                                                                                            "questionToken": null,
                                                                                                             "expression": {
                                                                                                                 "StringLiteral": {
                                                                                                                     "startQuote": null,
@@ -872,6 +883,7 @@
                                                                                                             "name": null,
                                                                                                             "colonToken": null,
                                                                                                             "dotDotDotToken": null,
+                                                                                                            "questionToken": null,
                                                                                                             "expression": {
                                                                                                                 "Variable": {
                                                                                                                     "dollar": null,
@@ -925,6 +937,7 @@
                                                                                                                 "kind": "DotDotDotToken",
                                                                                                                 "textLength": 3
                                                                                                             },
+                                                                                                            "questionToken": null,
                                                                                                             "expression": null
                                                                                                         }
                                                                                                     }

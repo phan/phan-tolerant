@@ -91,7 +91,6 @@
                                                 "textLength": 7
                                             }
                                         ],
-                                        "setVisibilityToken": null,
                                         "questionToken": null,
                                         "typeDeclarationList": null,
                                         "propertyElements": {
@@ -197,6 +196,7 @@
                                                                                             "name": null,
                                                                                             "colonToken": null,
                                                                                             "dotDotDotToken": null,
+                                                                                            "questionToken": null,
                                                                                             "expression": {
                                                                                                 "BinaryExpression": {
                                                                                                     "leftOperand": {

@@ -160,6 +160,7 @@
                                                                                         "name": null,
                                                                                         "colonToken": null,
                                                                                         "dotDotDotToken": null,
+                                                                                        "questionToken": null,
                                                                                         "expression": {
                                                                                             "Variable": {
                                                                                                 "dollar": null,

@@ -14,63 +14,50 @@
             {
                 "ExpressionStatement": {
                     "expression": {
-                        "ArrayCreationExpression": {
-                            "arrayKeyword": {
-                                "kind": "ArrayKeyword",
-                                "textLength": 5
-                            },
-                            "openParenOrBracket": {
-                                "kind": "OpenParenToken",
-                                "textLength": 1
-                            },
-                            "arrayElements": {
-                                "ArrayElementList": {
-                                    "children": [
-                                        {
-                                            "ArrayElement": {
-                                                "elementKey": null,
-                                                "arrowToken": null,
-                                                "byRef": null,
-                                                "dotDotDot": null,
-                                                "elementValue": {
-                                                    "NumericLiteral": {
-                                                        "children": {
-                                                            "kind": "IntegerLiteralToken",
-                                                            "textLength": 1
+                        "CallExpression": {
+                            "callableExpression": {
+                                "ArrayCreationExpression": {
+                                    "arrayKeyword": {
+                                        "kind": "ArrayKeyword",
+                                        "textLength": 5
+                                    },
+                                    "openParenOrBracket": {
+                                        "kind": "OpenParenToken",
+                                        "textLength": 1
+                                    },
+                                    "arrayElements": {
+                                        "ArrayElementList": {
+                                            "children": [
+                                                {
+                                                    "ArrayElement": {
+                                                        "elementKey": null,
+                                                        "arrowToken": null,
+                                                        "byRef": null,
+                                                        "dotDotDot": null,
+                                                        "elementValue": {
+                                                            "NumericLiteral": {
+                                                                "children": {
+                                                                    "kind": "IntegerLiteralToken",
+                                                                    "textLength": 1
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            }
+                                            ]
                                         }
-                                    ]
+                                    },
+                                    "closeParenOrBracket": {
+                                        "kind": "CloseParenToken",
+                                        "textLength": 1
+                                    }
                                 }
                             },
-                            "closeParenOrBracket": {
-                                "kind": "CloseParenToken",
-                                "textLength": 1
-                            }
-                        }
-                    },
-                    "semicolon": {
-                        "error": "MissingToken",
-                        "kind": "SemicolonToken",
-                        "textLength": 0
-                    }
-                }
-            },
-            {
-                "ExpressionStatement": {
-                    "expression": {
-                        "ParenthesizedExpression": {
                             "openParen": {
                                 "kind": "OpenParenToken",
                                 "textLength": 1
                             },
-                            "expression": {
-                                "error": "MissingToken",
-                                "kind": "Expression",
-                                "textLength": 0
-                            },
+                            "argumentExpressionList": null,
                             "closeParen": {
                                 "kind": "CloseParenToken",
                                 "textLength": 1
