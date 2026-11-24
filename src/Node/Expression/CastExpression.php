@@ -8,6 +8,8 @@ namespace Microsoft\PhpParser\Node\Expression;
 
 use Microsoft\PhpParser\Diagnostic;
 use Microsoft\PhpParser\DiagnosticKind;
+use Microsoft\PhpParser\MissingToken;
+use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Node\DelimitedList\ExpressionList;
 use Microsoft\PhpParser\Node\Statement\ExpressionStatement;
 use Microsoft\PhpParser\Node\Statement\ForStatement;
@@ -25,7 +27,7 @@ class CastExpression extends UnaryExpression {
     /** @var Token */
     public $closeParen;
 
-    /** @var Variable */
+    /** @var Expression|MissingToken the operand: a unary expression, or any expression for `(void)` */
     public $operand;
 
     const CHILD_NAMES = [
