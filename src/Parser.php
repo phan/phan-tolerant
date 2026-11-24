@@ -3514,7 +3514,11 @@ class Parser {
         $objectCreationExpression->classBaseClause = $this->parseClassBaseClause($objectCreationExpression);
         $objectCreationExpression->classInterfaceClause = $this->parseClassInterfaceClause($objectCreationExpression);
 
-        if ($this->getCurrentToken()->kind === TokenKind::OpenBraceToken) {
+        // After the default value of a property or parameter, a `{` starts the hook list unless this is an anonymous class:
+        // `public Foo $x = new Foo() { get => $this->x; }`
+        $isHookListStart = $this->isParsingPropertyInitializer &&
+            !($objectCreationExpression->classTypeDesignator instanceof Token && $objectCreationExpression->classTypeDesignator->kind === TokenKind::ClassKeyword);
+        if ($this->getCurrentToken()->kind === TokenKind::OpenBraceToken && !$isHookListStart) {
             $objectCreationExpression->classMembers = $this->parseClassMembers($objectCreationExpression);
         }
 
