@@ -38,7 +38,7 @@ class CastExpression extends UnaryExpression {
     ];
 
     /**
-     * `(void)` (php 8.5) is only allowed as a statement and in the expression lists of `for`: `$x = (void) f();` is a syntax error.
+     * `(void)` (php 8.5) is only allowed as a statement and in the expression lists of `for` (not as the last expression of the condition): `$x = (void) f();` is a syntax error.
      * @return Diagnostic|null
      */
     public function getDiagnosticForNode() {
@@ -47,8 +47,14 @@ class CastExpression extends UnaryExpression {
             return null;
         }
         $parent = $this->parent;
-        if ($parent instanceof ExpressionStatement || ($parent instanceof ExpressionList && $parent->parent instanceof ForStatement)) {
+        if ($parent instanceof ExpressionStatement) {
             return null;
+        }
+        if ($parent instanceof ExpressionList && $parent->parent instanceof ForStatement) {
+            // The last expression of the condition is the value that is tested: `for (; (void) f(), $ok; )` but not `for (; (void) f(); )`
+            if ($parent->parent->forControl !== $parent || \end($parent->children) !== $this) {
+                return null;
+            }
         }
         return new Diagnostic(
             DiagnosticKind::Error,

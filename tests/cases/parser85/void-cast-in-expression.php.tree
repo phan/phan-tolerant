@@ -471,6 +471,208 @@
                     "endFor": null,
                     "endForSemicolon": null
                 }
+            },
+            {
+                "ForStatement": {
+                    "for": {
+                        "kind": "ForKeyword",
+                        "textLength": 3
+                    },
+                    "openParen": {
+                        "kind": "OpenParenToken",
+                        "textLength": 1
+                    },
+                    "forInitializer": null,
+                    "exprGroupSemicolon1": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    },
+                    "forControl": {
+                        "ExpressionList": {
+                            "children": [
+                                {
+                                    "CastExpression": {
+                                        "openParen": null,
+                                        "castType": {
+                                            "kind": "VoidCastToken",
+                                            "textLength": 6
+                                        },
+                                        "closeParen": null,
+                                        "operand": {
+                                            "ReservedWord": {
+                                                "children": {
+                                                    "kind": "TrueReservedWord",
+                                                    "textLength": 4
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "exprGroupSemicolon2": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    },
+                    "forEndOfLoop": null,
+                    "closeParen": {
+                        "kind": "CloseParenToken",
+                        "textLength": 1
+                    },
+                    "colon": null,
+                    "statements": {
+                        "CompoundStatementNode": {
+                            "openBrace": {
+                                "kind": "OpenBraceToken",
+                                "textLength": 1
+                            },
+                            "statements": [],
+                            "closeBrace": {
+                                "kind": "CloseBraceToken",
+                                "textLength": 1
+                            }
+                        }
+                    },
+                    "endFor": null,
+                    "endForSemicolon": null
+                }
+            },
+            {
+                "ForStatement": {
+                    "for": {
+                        "kind": "ForKeyword",
+                        "textLength": 3
+                    },
+                    "openParen": {
+                        "kind": "OpenParenToken",
+                        "textLength": 1
+                    },
+                    "forInitializer": null,
+                    "exprGroupSemicolon1": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    },
+                    "forControl": {
+                        "ExpressionList": {
+                            "children": [
+                                {
+                                    "CastExpression": {
+                                        "openParen": null,
+                                        "castType": {
+                                            "kind": "VoidCastToken",
+                                            "textLength": 6
+                                        },
+                                        "closeParen": null,
+                                        "operand": {
+                                            "CallExpression": {
+                                                "callableExpression": {
+                                                    "QualifiedName": {
+                                                        "globalSpecifier": null,
+                                                        "relativeSpecifier": null,
+                                                        "nameParts": [
+                                                            {
+                                                                "kind": "Name",
+                                                                "textLength": 1
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "openParen": {
+                                                    "kind": "OpenParenToken",
+                                                    "textLength": 1
+                                                },
+                                                "argumentExpressionList": null,
+                                                "closeParen": {
+                                                    "kind": "CloseParenToken",
+                                                    "textLength": 1
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "kind": "CommaToken",
+                                    "textLength": 1
+                                },
+                                {
+                                    "Variable": {
+                                        "dollar": null,
+                                        "name": {
+                                            "kind": "VariableName",
+                                            "textLength": 3
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "exprGroupSemicolon2": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    },
+                    "forEndOfLoop": {
+                        "ExpressionList": {
+                            "children": [
+                                {
+                                    "CastExpression": {
+                                        "openParen": null,
+                                        "castType": {
+                                            "kind": "VoidCastToken",
+                                            "textLength": 6
+                                        },
+                                        "closeParen": null,
+                                        "operand": {
+                                            "CallExpression": {
+                                                "callableExpression": {
+                                                    "QualifiedName": {
+                                                        "globalSpecifier": null,
+                                                        "relativeSpecifier": null,
+                                                        "nameParts": [
+                                                            {
+                                                                "kind": "Name",
+                                                                "textLength": 1
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                "openParen": {
+                                                    "kind": "OpenParenToken",
+                                                    "textLength": 1
+                                                },
+                                                "argumentExpressionList": null,
+                                                "closeParen": {
+                                                    "kind": "CloseParenToken",
+                                                    "textLength": 1
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "closeParen": {
+                        "kind": "CloseParenToken",
+                        "textLength": 1
+                    },
+                    "colon": null,
+                    "statements": {
+                        "CompoundStatementNode": {
+                            "openBrace": {
+                                "kind": "OpenBraceToken",
+                                "textLength": 1
+                            },
+                            "statements": [],
+                            "closeBrace": {
+                                "kind": "CloseBraceToken",
+                                "textLength": 1
+                            }
+                        }
+                    },
+                    "endFor": null,
+                    "endForSemicolon": null
+                }
             }
         ],
         "endOfFileToken": {
