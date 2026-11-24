@@ -145,7 +145,8 @@ class QualifiedName extends Node implements NamespacedNameInterface {
         $parts = $this->nameParts;
         for ($i = \count($parts) - 1; $i >= 0; $i--) {
             // TODO - also handle reserved word tokens
-            if ($parts[$i]->kind === TokenKind::Name) {
+            // (ReadonlyKeyword is the name of a function in `readonly()`)
+            if ($parts[$i]->kind === TokenKind::Name || $parts[$i]->kind === TokenKind::ReadonlyKeyword) {
                 return $parts[$i];
             }
         }

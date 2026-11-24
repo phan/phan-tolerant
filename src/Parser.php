@@ -1522,8 +1522,9 @@ class Parser {
 
             case TokenKind::ReadonlyKeyword:
                 // A call of a function named readonly: `readonly()`.
-                // The token keeps its kind: php represents this name as a fully qualified name (php 8.6+).
-                if (!$this->isParsingObjectCreationExpression && $this->lookahead(TokenKind::OpenParenToken)) {
+                // The token keeps its kind, which the name APIs accept: php represents this name as a fully qualified name.
+                // Not directly after `new`, where php expects `readonly class`: `new readonly()` is a syntax error, `new (readonly())` is not.
+                if (!($parentNode instanceof ObjectCreationExpression) && $this->lookahead(TokenKind::OpenParenToken)) {
                     $qualifiedName = new QualifiedName();
                     $qualifiedName->parent = $parentNode;
                     $qualifiedName->nameParts = [$token];
