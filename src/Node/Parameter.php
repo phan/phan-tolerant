@@ -33,6 +33,8 @@ class Parameter extends Node {
     public $equalsToken;
     /** @var null|Expression */
     public $default;
+    /** @var PropertyHookList|null the property hooks of a promoted constructor parameter (PHP 8.4+) */
+    public $hookList;
 
     const CHILD_NAMES = [
         'attributes',
@@ -45,7 +47,8 @@ class Parameter extends Node {
         'dotDotDotToken',
         'variableName',
         'equalsToken',
-        'default'
+        'default',
+        'hookList',
     ];
 
     public function isVariadic() {

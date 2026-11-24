@@ -100,6 +100,12 @@ class QualifiedName extends Node implements NamespacedNameInterface {
             return ResolvedName::buildName($this->nameParts, $this->getFileContents());
         }
 
+        // The call of a function named readonly, when php's tokenizer returns the keyword (`readonly()` in php 8.6+):
+        // php's parser creates a fully qualified name.
+        if (\count($this->nameParts) === 1 && $this->nameParts[0] instanceof Token && $this->nameParts[0]->kind === TokenKind::ReadonlyKeyword) {
+            return ResolvedName::buildName($this->nameParts, $this->getFileContents());
+        }
+
         // RELATIVE NAMES
         // - resolve to the name with namespace replaced by the current namespace.
         // - if current namespace is global, strip leading namespace\ prefix.
@@ -145,7 +151,8 @@ class QualifiedName extends Node implements NamespacedNameInterface {
         $parts = $this->nameParts;
         for ($i = \count($parts) - 1; $i >= 0; $i--) {
             // TODO - also handle reserved word tokens
-            if ($parts[$i]->kind === TokenKind::Name) {
+            // (ReadonlyKeyword is the name of a function in `readonly()`)
+            if ($parts[$i]->kind === TokenKind::Name || $parts[$i]->kind === TokenKind::ReadonlyKeyword) {
                 return $parts[$i];
             }
         }

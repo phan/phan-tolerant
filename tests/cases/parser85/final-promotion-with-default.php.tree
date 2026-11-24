@@ -99,7 +99,8 @@
                                                                     },
                                                                     "endQuote": null
                                                                 }
-                                                            }
+                                                            },
+                                                            "hookList": null
                                                         }
                                                     },
                                                     {
@@ -148,7 +149,8 @@
                                                                         "textLength": 1
                                                                     }
                                                                 }
-                                                            }
+                                                            },
+                                                            "hookList": null
                                                         }
                                                     }
                                                 ]

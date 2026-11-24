@@ -15,7 +15,8 @@ class ResolvedName {
     public static function buildName(array $tokens, $content) : ResolvedName {
         $name = new ResolvedName();
         foreach ($tokens as $token) {
-            if ($token->kind === TokenKind::Name) {
+            // (ReadonlyKeyword is the name of a function in `readonly()`)
+            if ($token->kind === TokenKind::Name || $token->kind === TokenKind::ReadonlyKeyword) {
                 $name->parts[] = $token->getText($content);
             }
         }
@@ -24,7 +25,7 @@ class ResolvedName {
 
     public function addNameParts(array $parts, $content) {
         foreach ($parts as $part) {
-            if ($part->kind === TokenKind::Name && !($part instanceof MissingToken)) {
+            if (($part->kind === TokenKind::Name || $part->kind === TokenKind::ReadonlyKeyword) && !($part instanceof MissingToken)) {
                 $this->parts[] = $part->getText($content);
             }
         }

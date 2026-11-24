@@ -70,7 +70,8 @@
                                                             "textLength": 2
                                                         },
                                                         "equalsToken": null,
-                                                        "default": null
+                                                        "default": null,
+                                                        "hookList": null
                                                     }
                                                 }
                                             ]
@@ -207,7 +208,8 @@
                                                             "textLength": 2
                                                         }
                                                     }
-                                                }
+                                                },
+                                                "hookList": null
                                             }
                                         }
                                     ]
@@ -294,7 +296,8 @@
                                                     "textLength": 2
                                                 },
                                                 "equalsToken": null,
-                                                "default": null
+                                                "default": null,
+                                                "hookList": null
                                             }
                                         }
                                     ]
@@ -365,7 +368,8 @@
                                                     "textLength": 2
                                                 },
                                                 "equalsToken": null,
-                                                "default": null
+                                                "default": null,
+                                                "hookList": null
                                             }
                                         }
                                     ]
@@ -433,7 +437,8 @@
                                                     "textLength": 2
                                                 },
                                                 "equalsToken": null,
-                                                "default": null
+                                                "default": null,
+                                                "hookList": null
                                             }
                                         },
                                         {
@@ -458,7 +463,8 @@
                                                     "textLength": 5
                                                 },
                                                 "equalsToken": null,
-                                                "default": null
+                                                "default": null,
+                                                "hookList": null
                                             }
                                         }
                                     ]

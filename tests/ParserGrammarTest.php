@@ -60,6 +60,7 @@ class ParserGrammarTest extends TestCase {
     const PHP81_FILE_PATTERN = __DIR__ . "/cases/parser81/*";
     const PHP84_FILE_PATTERN = __DIR__ . "/cases/parser84/*";
     const PHP85_FILE_PATTERN = __DIR__ . "/cases/parser85/*";
+    const PHP86_FILE_PATTERN = __DIR__ . "/cases/parser86/*";
 
     const PATTERNS_FOR_MINIMUM_PHP_VERSION = [
         [70400, self::PHP74_FILE_PATTERN],
@@ -67,6 +68,8 @@ class ParserGrammarTest extends TestCase {
         [80100, self::PHP81_FILE_PATTERN],
         [80400, self::PHP84_FILE_PATTERN],
         [80500, self::PHP85_FILE_PATTERN],
+        // Syntax that php 8.6 tokenizes differently, e.g. `readonly(` is no longer a T_STRING
+        [80600, self::PHP86_FILE_PATTERN],
     ];
 
     public function treeProvider() {

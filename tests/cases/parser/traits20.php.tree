@@ -82,10 +82,6 @@
                                                                 {
                                                                     "kind": "ProtectedKeyword",
                                                                     "textLength": 9
-                                                                },
-                                                                {
-                                                                    "kind": "PublicKeyword",
-                                                                    "textLength": 6
                                                                 }
                                                             ],
                                                             "targetNameList": {
@@ -95,34 +91,62 @@
                                                                     "nameParts": [
                                                                         {
                                                                             "kind": "Name",
-                                                                            "textLength": 1
+                                                                            "textLength": 6
                                                                         }
                                                                     ]
                                                                 }
                                                             }
                                                         }
-                                                    },
-                                                    {
-                                                        "kind": "SemicolonToken",
-                                                        "textLength": 1
                                                     }
                                                 ]
                                             }
                                         },
                                         "closeBrace": {
+                                            "error": "MissingToken",
                                             "kind": "CloseBraceToken",
-                                            "textLength": 1
+                                            "textLength": 0
                                         }
                                     }
                                 }
                             ],
                             "closeBrace": {
+                                "error": "MissingToken",
                                 "kind": "CloseBraceToken",
-                                "textLength": 1
+                                "textLength": 0
                             }
                         }
                     }
                 }
+            },
+            {
+                "ExpressionStatement": {
+                    "expression": {
+                        "QualifiedName": {
+                            "globalSpecifier": null,
+                            "relativeSpecifier": null,
+                            "nameParts": [
+                                {
+                                    "kind": "Name",
+                                    "textLength": 1
+                                }
+                            ]
+                        }
+                    },
+                    "semicolon": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    }
+                }
+            },
+            {
+                "error": "SkippedToken",
+                "kind": "CloseBraceToken",
+                "textLength": 1
+            },
+            {
+                "error": "SkippedToken",
+                "kind": "CloseBraceToken",
+                "textLength": 1
             }
         ],
         "endOfFileToken": {

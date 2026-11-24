@@ -20,6 +20,7 @@
                                 "textLength": 3
                             },
                             "attributes": null,
+                            "modifiers": null,
                             "classTypeDesignator": {
                                 "ParenthesizedExpression": {
                                     "openParen": {

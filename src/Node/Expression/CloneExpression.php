@@ -6,6 +6,7 @@
 
 namespace Microsoft\PhpParser\Node\Expression;
 
+use Microsoft\PhpParser\Node\DelimitedList\ArgumentExpressionList;
 use Microsoft\PhpParser\Node\Expression;
 use Microsoft\PhpParser\Token;
 
@@ -17,7 +18,7 @@ class CloneExpression extends Expression {
     /** @var Token|null OpenParenToken for clone($obj, ...) syntax (PHP 8.5+) */
     public $openParen;
 
-    /** @var Expression */
+    /** @var Expression|null */
     public $expression;
 
     /** @var Token|null CommaToken between object and modifications (PHP 8.5+) */
@@ -25,6 +26,13 @@ class CloneExpression extends Expression {
 
     /** @var Expression|null Array expression with property modifications (PHP 8.5+) */
     public $modifications;
+
+    /**
+     * @var ArgumentExpressionList|null the arguments of `clone` when they are not a single object
+     * optionally followed by the property modifications, e.g. placeholders (PHP 8.6+) `clone(?)`, `clone($obj, ...)`,
+     * named arguments `clone(object: $obj)`, or no arguments `clone()`. If this is set, expression and modifications are null.
+     */
+    public $argumentExpressionList;
 
     /** @var Token|null CloseParenToken for clone($obj, ...) syntax (PHP 8.5+) */
     public $closeParen;
@@ -35,6 +43,7 @@ class CloneExpression extends Expression {
         'expression',
         'commaToken',
         'modifications',
+        'argumentExpressionList',
         'closeParen'
     ];
 }

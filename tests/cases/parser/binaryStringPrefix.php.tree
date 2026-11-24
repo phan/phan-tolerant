@@ -1,0 +1,159 @@
+{
+    "SourceFileNode": {
+        "statementList": [
+            {
+                "InlineHtml": {
+                    "scriptSectionEndTag": null,
+                    "text": null,
+                    "scriptSectionStartTag": {
+                        "kind": "ScriptSectionStartTag",
+                        "textLength": 6
+                    }
+                }
+            },
+            {
+                "EchoStatement": {
+                    "echoKeyword": {
+                        "kind": "EchoKeyword",
+                        "textLength": 4
+                    },
+                    "expressions": {
+                        "ExpressionList": {
+                            "children": [
+                                {
+                                    "StringLiteral": {
+                                        "startQuote": {
+                                            "kind": "DoubleQuoteToken",
+                                            "textLength": 2
+                                        },
+                                        "children": [
+                                            {
+                                                "kind": "EncapsedAndWhitespace",
+                                                "textLength": 2
+                                            },
+                                            {
+                                                "Variable": {
+                                                    "dollar": null,
+                                                    "name": {
+                                                        "kind": "VariableName",
+                                                        "textLength": 2
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "kind": "EncapsedAndWhitespace",
+                                                "textLength": 2
+                                            }
+                                        ],
+                                        "endQuote": {
+                                            "kind": "DoubleQuoteToken",
+                                            "textLength": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "semicolon": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    }
+                }
+            },
+            {
+                "EchoStatement": {
+                    "echoKeyword": {
+                        "kind": "EchoKeyword",
+                        "textLength": 4
+                    },
+                    "expressions": {
+                        "ExpressionList": {
+                            "children": [
+                                {
+                                    "StringLiteral": {
+                                        "startQuote": {
+                                            "kind": "DoubleQuoteToken",
+                                            "textLength": 2
+                                        },
+                                        "children": [
+                                            {
+                                                "Variable": {
+                                                    "dollar": null,
+                                                    "name": {
+                                                        "kind": "VariableName",
+                                                        "textLength": 2
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "endQuote": {
+                                            "kind": "DoubleQuoteToken",
+                                            "textLength": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "semicolon": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    }
+                }
+            },
+            {
+                "EchoStatement": {
+                    "echoKeyword": {
+                        "kind": "EchoKeyword",
+                        "textLength": 4
+                    },
+                    "expressions": {
+                        "ExpressionList": {
+                            "children": [
+                                {
+                                    "StringLiteral": {
+                                        "startQuote": {
+                                            "kind": "HeredocStart",
+                                            "textLength": 6
+                                        },
+                                        "children": [
+                                            {
+                                                "kind": "EncapsedAndWhitespace",
+                                                "textLength": 2
+                                            },
+                                            {
+                                                "Variable": {
+                                                    "dollar": null,
+                                                    "name": {
+                                                        "kind": "VariableName",
+                                                        "textLength": 2
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "kind": "EncapsedAndWhitespace",
+                                                "textLength": 1
+                                            }
+                                        ],
+                                        "endQuote": {
+                                            "kind": "HeredocEnd",
+                                            "textLength": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "semicolon": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "textLength": 0
+        }
+    }
+}

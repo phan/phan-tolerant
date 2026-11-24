@@ -20,6 +20,8 @@ define(__NAMESPACE__ . '\T_ENUM', defined('T_ENUM') ? constant('T_ENUM') : 'T_EN
 define(__NAMESPACE__ . '\T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG', defined('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') ? constant('T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG') : 'T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG');
 define(__NAMESPACE__ . '\T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG', defined('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') ? constant('T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG') : 'T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG');
 define(__NAMESPACE__ . '\T_READONLY', defined('T_READONLY') ? constant('T_READONLY') : 'T_READONLY');
+// If this predates PHP 8.4, T_PROPERTY_C is unavailable, and `__PROPERTY__` is a T_STRING.
+define(__NAMESPACE__ . '\T_PROPERTY_C', defined('T_PROPERTY_C') ? constant('T_PROPERTY_C') : 'T_PROPERTY_C');
 // If this predates PHP 8.5, T_VOID_CAST is unavailable.
 define(__NAMESPACE__ . '\T_VOID_CAST', defined('T_VOID_CAST') ? constant('T_VOID_CAST') : 'T_VOID_CAST');
 
@@ -301,6 +303,7 @@ class PhpTokenizer implements TokenStreamProviderInterface {
         T_METHOD_C => TokenKind::Name,
         T_NS_C => TokenKind::Name,
         T_TRAIT_C => TokenKind::Name,
+        T_PROPERTY_C => TokenKind::Name,
         T_LINE => TokenKind::Name,
 
         T_STRING => TokenKind::Name,
@@ -456,6 +459,9 @@ class PhpTokenizer implements TokenStreamProviderInterface {
         T_INLINE_HTML => TokenKind::InlineHtml,
 
         "\"" => TokenKind::DoubleQuoteToken,
+        // The binary string prefix of an interpolated string: `b"a $x"`
+        "b\"" => TokenKind::DoubleQuoteToken,
+        "B\"" => TokenKind::DoubleQuoteToken,
         "'" => TokenKind::SingleQuoteToken,
         T_ENCAPSED_AND_WHITESPACE => TokenKind::EncapsedAndWhitespace,
         T_DOLLAR_OPEN_CURLY_BRACES => TokenKind::DollarOpenBraceToken,

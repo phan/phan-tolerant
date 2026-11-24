@@ -85,7 +85,8 @@
                                                                 "textLength": 6
                                                             },
                                                             "equalsToken": null,
-                                                            "default": null
+                                                            "default": null,
+                                                            "hookList": null
                                                         }
                                                     },
                                                     {
@@ -119,7 +120,8 @@
                                                                 "textLength": 5
                                                             },
                                                             "equalsToken": null,
-                                                            "default": null
+                                                            "default": null,
+                                                            "hookList": null
                                                         }
                                                     }
                                                 ]
@@ -206,6 +208,7 @@
                                                                             "PropertyHook": {
                                                                                 "attributes": null,
                                                                                 "modifiers": [],
+                                                                                "byRefToken": null,
                                                                                 "hookKeyword": {
                                                                                     "kind": "Name",
                                                                                     "textLength": 3
@@ -308,6 +311,7 @@
                                                                             "PropertyHook": {
                                                                                 "attributes": null,
                                                                                 "modifiers": [],
+                                                                                "byRefToken": null,
                                                                                 "hookKeyword": {
                                                                                     "kind": "Name",
                                                                                     "textLength": 3
@@ -343,7 +347,8 @@
                                                                                                         "textLength": 6
                                                                                                     },
                                                                                                     "equalsToken": null,
-                                                                                                    "default": null
+                                                                                                    "default": null,
+                                                                                                    "hookList": null
                                                                                                 }
                                                                                             }
                                                                                         ]

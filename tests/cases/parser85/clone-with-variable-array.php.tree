@@ -185,6 +185,7 @@
                                         "textLength": 3
                                     },
                                     "attributes": null,
+                                    "modifiers": null,
                                     "classTypeDesignator": {
                                         "QualifiedName": {
                                             "globalSpecifier": null,
@@ -376,6 +377,7 @@
                                             }
                                         }
                                     },
+                                    "argumentExpressionList": null,
                                     "closeParen": {
                                         "kind": "CloseParenToken",
                                         "textLength": 1
