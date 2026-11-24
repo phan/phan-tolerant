@@ -3209,9 +3209,11 @@ class Parser {
             // Property hooks: don't parse `{` after certain expression types
             // as those are property hook lists, not subscript expressions
             if ($tokenKind === TokenKind::OpenBraceToken &&
-                ($expression instanceof StringLiteral ||
+                ($this->isParsingPropertyInitializer ||
+                 $expression instanceof StringLiteral ||
                  $expression instanceof ArrayCreationExpression ||
-                 $expression instanceof ObjectCreationExpression)) {
+                 $expression instanceof ObjectCreationExpression ||
+                 $expression instanceof ReservedWord)) {
                 return $expression;
             }
             $expression = $this->parseSubscriptExpression($expression);
@@ -3687,6 +3689,9 @@ class Parser {
         };
     }
 
+    /** @var bool whether the default value of a property is being parsed, which cannot be followed by a `{` subscript */
+    private $isParsingPropertyInitializer = false;
+
     private function parsePropertyElement($parentNode): PropertyElement
     {
         $element = new PropertyElement();
@@ -3694,7 +3699,11 @@ class Parser {
         $element->variable = $this->parseSimpleVariable($element);
         $element->equalsToken = $this->eatOptional1(TokenKind::EqualsToken);
         if ($element->equalsToken !== null) {
+            // A `{` after the default value starts the hook list: `public int $x = self::A { get => 1; }`
+            $oldIsParsingPropertyInitializer = $this->isParsingPropertyInitializer;
+            $this->isParsingPropertyInitializer = true;
             $element->initializer = $this->parseExpression($element);
+            $this->isParsingPropertyInitializer = $oldIsParsingPropertyInitializer;
         }
         if ($this->getCurrentToken()->kind === TokenKind::OpenBraceToken) {
             $element->hookList = $this->parsePropertyHookList($element);

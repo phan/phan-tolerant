@@ -1,0 +1,14 @@
+[
+    {
+        "kind": 0,
+        "message": "Variadic placeholder must be last",
+        "start": 13,
+        "length": 3
+    },
+    {
+        "kind": 0,
+        "message": "Variadic placeholder may only appear once",
+        "start": 29,
+        "length": 3
+    }
+]

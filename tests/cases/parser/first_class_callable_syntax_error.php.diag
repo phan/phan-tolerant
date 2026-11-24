@@ -1,1 +1,8 @@
-[]
+[
+    {
+        "kind": 0,
+        "message": "Variadic placeholder must be last",
+        "start": 18,
+        "length": 3
+    }
+]
