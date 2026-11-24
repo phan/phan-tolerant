@@ -23,6 +23,9 @@ class ObjectCreationExpression extends Expression {
     /** @var AttributeGroup[]|null optional attributes of an anonymous class. */
     public $attributes;
 
+    /** @var Token[]|null optional modifiers of an anonymous class, such as `readonly` in `new readonly class {}`. */
+    public $modifiers;
+
     /** @var QualifiedName|Variable|Token */
     public $classTypeDesignator;
 
@@ -47,6 +50,7 @@ class ObjectCreationExpression extends Expression {
     const CHILD_NAMES = [
         'newKeword',
         'attributes',
+        'modifiers',
         'classTypeDesignator',
         'openParen',
         'argumentExpressionList',

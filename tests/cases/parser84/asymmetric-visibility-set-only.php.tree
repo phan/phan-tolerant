@@ -389,7 +389,8 @@
                                                                         "textLength": 1
                                                                     }
                                                                 }
-                                                            }
+                                                            },
+                                                            "hookList": null
                                                         }
                                                     },
                                                     {
@@ -438,7 +439,8 @@
                                                                         "textLength": 1
                                                                     }
                                                                 }
-                                                            }
+                                                            },
+                                                            "hookList": null
                                                         }
                                                     }
                                                 ]

@@ -57,6 +57,7 @@
                                                         "textLength": 3
                                                     },
                                                     "attributes": null,
+                                                    "modifiers": null,
                                                     "classTypeDesignator": {
                                                         "QualifiedName": {
                                                             "globalSpecifier": null,
@@ -146,6 +147,7 @@
                                                         "textLength": 3
                                                     },
                                                     "attributes": null,
+                                                    "modifiers": null,
                                                     "classTypeDesignator": {
                                                         "QualifiedName": {
                                                             "globalSpecifier": null,

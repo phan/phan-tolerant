@@ -91,6 +91,7 @@
                                     },
                                     "commaToken": null,
                                     "modifications": null,
+                                    "argumentExpressionList": null,
                                     "closeParen": null
                                 }
                             }
@@ -150,6 +151,7 @@
                                     },
                                     "commaToken": null,
                                     "modifications": null,
+                                    "argumentExpressionList": null,
                                     "closeParen": null
                                 }
                             }
@@ -241,6 +243,7 @@
                                     },
                                     "commaToken": null,
                                     "modifications": null,
+                                    "argumentExpressionList": null,
                                     "closeParen": null
                                 }
                             }
@@ -340,6 +343,7 @@
                                             }
                                         }
                                     },
+                                    "argumentExpressionList": null,
                                     "closeParen": {
                                         "kind": "CloseParenToken",
                                         "textLength": 1

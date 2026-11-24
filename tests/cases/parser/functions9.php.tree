@@ -45,7 +45,8 @@
                                             "textLength": 2
                                         },
                                         "equalsToken": null,
-                                        "default": null
+                                        "default": null,
+                                        "hookList": null
                                     }
                                 },
                                 {
@@ -70,7 +71,8 @@
                                             "textLength": 2
                                         },
                                         "equalsToken": null,
-                                        "default": null
+                                        "default": null,
+                                        "hookList": null
                                     }
                                 }
                             ]

@@ -6,6 +6,7 @@
 
 namespace Microsoft\PhpParser\Node;
 
+use Microsoft\PhpParser\MissingToken;
 use Microsoft\PhpParser\ModifiedTypeInterface;
 use Microsoft\PhpParser\ModifiedTypeTrait;
 use Microsoft\PhpParser\Node;
@@ -22,7 +23,7 @@ class TraitSelectOrAliasClause extends Node implements ModifiedTypeInterface {
     public $asOrInsteadOfKeyword;
 
     /**
-     * @var QualifiedNameList|QualifiedName depends on the keyword
+     * @var QualifiedNameList|QualifiedName|MissingToken|null depends on the keyword (null for an alias that only changes the visibility: `f as protected;`)
      */
     public $targetNameList;
 

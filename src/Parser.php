@@ -617,10 +617,14 @@ class Parser {
                     break;
 
                 // class-declaration
+                case TokenKind::ReadonlyKeyword:
+                    if ($this->lookahead(TokenKind::OpenParenToken)) {
+                        // A call of a function named readonly: `readonly();`
+                        break;
+                    }
+                    // fallthrough
                 case TokenKind::FinalKeyword:
                 case TokenKind::AbstractKeyword:
-                case TokenKind::ReadonlyKeyword:
-                    // fallthrough
                 case TokenKind::ClassKeyword:
                     return $this->parseClassDeclaration($parentNode);
 
@@ -968,7 +972,17 @@ class Parser {
             $parameter->equalsToken = $this->eatOptional1(TokenKind::EqualsToken);
             if ($parameter->equalsToken !== null) {
                 // TODO add post-parse rule that checks for invalid assignments
+                // A `{` after the default value starts the hook list: `public int $x = 1 { get => 1; }`
+                $oldIsParsingPropertyInitializer = $this->isParsingPropertyInitializer;
+                $this->isParsingPropertyInitializer = true;
                 $parameter->default = $this->parseExpression($parameter);
+                $this->isParsingPropertyInitializer = $oldIsParsingPropertyInitializer;
+            }
+            if ($this->getCurrentToken()->kind === TokenKind::OpenBraceToken) {
+                // The property hooks of a promoted constructor parameter (PHP 8.4+): `public int $x { get => 1; }`
+                // (Hooks make a parameter of a constructor a promoted property, also without a visibility: `int $x { get => 1; }`.
+                // php's compiler rejects them on the parameters of other functions.)
+                $parameter->hookList = $this->parsePropertyHookList($parameter);
             }
             return $parameter;
         };
@@ -1371,9 +1385,25 @@ class Parser {
                 case TokenKind::FnKeyword:
                 case TokenKind::AttributeToken:
                     return true;
+
+                // a call of a function named readonly: `readonly()`
+                case TokenKind::ReadonlyKeyword:
+                    return $this->isReadonlyFunctionCallStart($token);
             }
             return \in_array($token->kind, $this->reservedWordTokens, true);
         };
+    }
+
+    /**
+     * Handles the fact that $token may either be getCurrentToken or the token immediately before it in isExpressionStartFn().
+     * @return bool whether the token `readonly` is the name of a function that is called: `readonly()`
+     */
+    private function isReadonlyFunctionCallStart(Token $token) : bool {
+        $nextToken = $this->getCurrentToken();
+        if ($nextToken !== $token) {
+            return $nextToken->kind === TokenKind::OpenParenToken;
+        }
+        return ($this->lexer->getTokensArray()[$this->lexer->getCurrentPosition()]->kind ?? null) === TokenKind::OpenParenToken;
     }
 
     /**
@@ -1489,6 +1519,18 @@ class Parser {
                 return $this->parseReservedWordExpression($parentNode);
             case TokenKind::MatchKeyword:
                 return $this->parseMatchExpression($parentNode);
+
+            case TokenKind::ReadonlyKeyword:
+                // A call of a function named readonly: `readonly()`.
+                // The token keeps its kind: php represents this name as a fully qualified name (php 8.6+).
+                if (!$this->isParsingObjectCreationExpression && $this->lookahead(TokenKind::OpenParenToken)) {
+                    $qualifiedName = new QualifiedName();
+                    $qualifiedName->parent = $parentNode;
+                    $qualifiedName->nameParts = [$token];
+                    $this->advanceToken();
+                    return $qualifiedName;
+                }
+                break;
         }
         if (\in_array($token->kind, TokenStringMaps::RESERVED_WORDS)) {
             return $this->parseQualifiedName($parentNode);
@@ -1606,6 +1648,14 @@ class Parser {
             $subscriptExpression->accessExpression = $this->parseSimpleVariable($subscriptExpression);
         } elseif ($token->kind === TokenKind::IntegerLiteralToken) {
             $subscriptExpression->accessExpression = $this->parseNumericLiteralExpression($subscriptExpression);
+        } elseif ($token->kind === TokenKind::MinusToken &&
+            ($this->lexer->getTokensArray()[$this->lexer->getCurrentPosition()]->kind ?? null) === TokenKind::IntegerLiteralToken) {
+            // A negative offset: `"$a[-1]"`
+            $unaryExpression = new UnaryOpExpression();
+            $unaryExpression->parent = $subscriptExpression;
+            $unaryExpression->operator = $this->eat1(TokenKind::MinusToken);
+            $unaryExpression->operand = $this->parseNumericLiteralExpression($unaryExpression);
+            $subscriptExpression->accessExpression = $unaryExpression;
         } elseif ($token->kind === TokenKind::StringLiteralToken) {
             // TODO: investigate if this should add other uncommon types of tokens for strings/numbers mentioned in parsePrimaryExpression()
             $subscriptExpression->accessExpression = $this->parseStringLiteralExpression($subscriptExpression);
@@ -3443,6 +3493,11 @@ class Parser {
             // But handle this like $objectCreationExpression->classMembers and leave it up to the applications to detect the invalid combination.
             $objectCreationExpression->attributes = $this->parseAttributeGroups($objectCreationExpression);
         }
+        if ($this->isAnonymousClassModifierListStart()) {
+            // The modifiers of an anonymous class: `new readonly class {}`
+            // (php's parser also accepts `final` and `abstract`, but rejects them in the compiler)
+            $objectCreationExpression->modifiers = $this->parseModifiers();
+        }
         $objectCreationExpression->classTypeDesignator =
             $this->eatOptional1(TokenKind::ClassKeyword) ??
             $this->parseExpression($objectCreationExpression);
@@ -3473,6 +3528,28 @@ class Parser {
         }
 
         return $objectCreationExpression;
+    }
+
+    /**
+     * @return bool whether the current token starts the modifiers of an anonymous class: `readonly class`, `final readonly class`
+     */
+    private function isAnonymousClassModifierListStart(): bool {
+        $tokens = $this->lexer->getTokensArray();
+        $position = $this->lexer->getCurrentPosition() - 1;
+        $hasModifier = false;
+        for ($n = \count($tokens); $position < $n; $position++) {
+            switch ($tokens[$position]->kind) {
+                case TokenKind::ReadonlyKeyword:
+                case TokenKind::FinalKeyword:
+                case TokenKind::AbstractKeyword:
+                    $hasModifier = true;
+                    continue 2;
+                case TokenKind::ClassKeyword:
+                    return $hasModifier;
+            }
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -3708,7 +3785,10 @@ class Parser {
         return $element;
     }
 
-    private function parsePropertyHookList(PropertyElement $parentNode): PropertyHookList
+    /**
+     * @param PropertyElement|Parameter $parentNode
+     */
+    private function parsePropertyHookList(Node $parentNode): PropertyHookList
     {
         $hookList = new PropertyHookList();
         $hookList->parent = $parentNode;
@@ -3748,6 +3828,8 @@ class Parser {
         }
 
         $hook->modifiers = $this->parsePropertyHookModifiers();
+        // A hook that returns by reference: `&get => $this->x;`
+        $hook->byRefToken = $this->eatOptional1(TokenKind::AmpersandToken);
 
         $token = $this->getCurrentToken();
         if ($token->kind === TokenKind::Name) {
@@ -3996,7 +4078,9 @@ class Parser {
             DelimitedList\NamespaceUseClauseList::class,
             TokenKind::CommaToken,
             function ($token) {
-                return $this->isQualifiedNameStart($token) || $token->kind === TokenKind::FunctionKeyword || $token->kind === TokenKind::ConstKeyword;
+                // A reserved word is a name that php's compiler rejects in some cases: `use string as S;`
+                return $this->isQualifiedNameStart($token) || $token->kind === TokenKind::FunctionKeyword || $token->kind === TokenKind::ConstKeyword ||
+                    \in_array($token->kind, $this->reservedWordTokens, true);
             },
             function ($parentNode) {
                 $namespaceUseClause = new NamespaceUseClause();
@@ -4026,7 +4110,8 @@ class Parser {
             DelimitedList\NamespaceUseGroupClauseList::class,
             TokenKind::CommaToken,
             function ($token) {
-                return $this->isQualifiedNameStart($token) || $token->kind === TokenKind::FunctionKeyword || $token->kind === TokenKind::ConstKeyword;
+                return $this->isQualifiedNameStart($token) || $token->kind === TokenKind::FunctionKeyword || $token->kind === TokenKind::ConstKeyword ||
+                    \in_array($token->kind, $this->reservedWordTokens, true);
             },
             function ($parentNode) {
                 $namespaceUseGroupClause = new NamespaceUseGroupClause();
@@ -4048,7 +4133,9 @@ class Parser {
         $namespaceAliasingClause = new NamespaceAliasingClause();
         $namespaceAliasingClause->parent = $parentNode;
         $namespaceAliasingClause->asKeyword = $this->eat1(TokenKind::AsKeyword);
-        $namespaceAliasingClause->name = $this->eat1(TokenKind::Name);
+        // The alias can be a reserved word: `use function Foo\bar as string;`
+        $namespaceAliasingClause->name = $this->eat($this->nameOrReservedWordTokens);
+        $namespaceAliasingClause->name->kind = TokenKind::Name;
         return $namespaceAliasingClause;
     }
 
@@ -4290,7 +4377,10 @@ class Parser {
         return $this->parseDelimitedList(
             DelimitedList\TraitSelectOrAliasClauseList::class,
             TokenKind::SemicolonToken,
-            $this->isQualifiedNameStartFn(),
+            function ($token) {
+                // A semi-reserved word can be the name of the method: `list as protected;`
+                return $this->isQualifiedNameStart($token) || $this->isTraitAdaptationSemiReservedWord($token, TokenKind::AsKeyword);
+            },
             $this->parseTraitSelectOrAliasClauseFn(),
             $parentNode
         );
@@ -4301,21 +4391,58 @@ class Parser {
             $traitSelectAndAliasClause = new TraitSelectOrAliasClause();
             $traitSelectAndAliasClause->parent = $parentNode;
             $traitSelectAndAliasClause->name = // TODO update spec
-                $this->parseQualifiedNameOrScopedPropertyAccessExpression($traitSelectAndAliasClause);
+                $this->isTraitAdaptationSemiReservedWord($this->token, TokenKind::AsKeyword)
+                ? $this->parseTraitAdaptationSemiReservedWord($traitSelectAndAliasClause)
+                : $this->parseQualifiedNameOrScopedPropertyAccessExpression($traitSelectAndAliasClause);
 
             $traitSelectAndAliasClause->asOrInsteadOfKeyword = $this->eat(TokenKind::AsKeyword, TokenKind::InsteadOfKeyword);
-            $traitSelectAndAliasClause->modifiers = $this->parseModifiers(); // TODO accept all modifiers, verify later
 
             if ($traitSelectAndAliasClause->asOrInsteadOfKeyword->kind === TokenKind::InsteadOfKeyword) {
+                $traitSelectAndAliasClause->modifiers = $this->parseModifiers(); // TODO accept all modifiers, verify later
                 $traitSelectAndAliasClause->targetNameList = $this->parseQualifiedNameList($traitSelectAndAliasClause);
             } else {
+                // An alias has at most one modifier, and the alias can be a semi-reserved word: `f as list;`, `f as public static;`
+                // (`var` is not a modifier of an alias: `f as var;`)
+                $traitSelectAndAliasClause->modifiers = $this->isModifier($this->token) && $this->token->kind !== TokenKind::VarKeyword
+                    ? [$this->eat1($this->token->kind)]
+                    : [];
                 $traitSelectAndAliasClause->targetNameList =
-                    $this->parseQualifiedNameOrScopedPropertyAccessExpression($traitSelectAndAliasClause);
+                    $this->isTraitAdaptationSemiReservedWord($this->token, TokenKind::SemicolonToken)
+                    ? $this->parseTraitAdaptationSemiReservedWord($traitSelectAndAliasClause)
+                    : $this->parseQualifiedNameOrScopedPropertyAccessExpression($traitSelectAndAliasClause);
+                if (!$traitSelectAndAliasClause->targetNameList && !$traitSelectAndAliasClause->modifiers) {
+                    // `f as;`
+                    $traitSelectAndAliasClause->targetNameList = new MissingToken(TokenKind::Name, $this->token->fullStart);
+                }
             }
 
             // TODO errors for insteadof/as
             return $traitSelectAndAliasClause;
         };
+    }
+
+    /**
+     * @param Token $token
+     * @param int $nextTokenKind the kind of the token that must follow
+     * @return bool whether the token is a keyword or reserved word that is the name of a method or alias in a trait adaptation,
+     * which is followed by a token of $nextTokenKind: `list as protected;`, `f as list;`, `f as namespace;`
+     */
+    private function isTraitAdaptationSemiReservedWord($token, int $nextTokenKind): bool {
+        if ($token->kind === TokenKind::Name || !\in_array($token->kind, $this->nameOrKeywordOrReservedWordTokens, true)) {
+            return false;
+        }
+        $nextToken = $this->lexer->getTokensArray()[$this->lexer->getCurrentPosition()] ?? null;
+        return $nextToken && $nextToken->kind === $nextTokenKind;
+    }
+
+    private function parseTraitAdaptationSemiReservedWord($parentNode): QualifiedName {
+        $node = new QualifiedName();
+        $node->parent = $parentNode;
+        $token = $this->token;
+        $this->advanceToken();
+        $token->kind = TokenKind::Name;
+        $node->nameParts = [$token];
+        return $node;
     }
 
     private function parseQualifiedNameOrScopedPropertyAccessExpression($parentNode) {
@@ -4609,14 +4736,25 @@ class Parser {
         // PHP 8.5: clone can now be used like a function: clone($obj, ["prop" => $val])
         // Without a second argument, `clone (...)` is the traditional syntax with a parenthesized expression,
         // which may continue after the parentheses: `clone ($a)->b`, `clone ($a)[0]`.
-        if ($this->getCurrentToken()->kind === TokenKind::OpenParenToken && $this->isParenthesizedListWithComma()) {
+        if ($this->getCurrentToken()->kind === TokenKind::OpenParenToken && $this->isCloneArgumentList()) {
             $cloneExpression->openParen = $this->eat1(TokenKind::OpenParenToken);
-            $cloneExpression->expression = $this->parseExpression($cloneExpression);
-
-            // Check for optional second argument (property modifications)
-            if ($this->getCurrentToken()->kind === TokenKind::CommaToken) {
-                $cloneExpression->commaToken = $this->eat1(TokenKind::CommaToken);
-                $cloneExpression->modifications = $this->parseExpression($cloneExpression);
+            $argumentExpressionList = $this->parseArgumentExpressionList($cloneExpression);
+            $arguments = $argumentExpressionList->children ?? [];
+            $object = $arguments[0] ?? null;
+            $modifications = \count($arguments) === 3 ? $arguments[2] : null;
+            if ($object instanceof ArgumentExpression && $this->isCloneObjectArgument($object) && (\count($arguments) === 1 ||
+                ($modifications instanceof ArgumentExpression && $this->isCloneObjectArgument($modifications)))) {
+                // `clone($obj, ["prop" => $val])`: the object and the optional property modifications.
+                $cloneExpression->expression = $object->expression;
+                $cloneExpression->expression->parent = $cloneExpression;
+                if ($modifications instanceof ArgumentExpression) {
+                    $cloneExpression->commaToken = $arguments[1];
+                    $cloneExpression->modifications = $modifications->expression;
+                    $cloneExpression->modifications->parent = $cloneExpression;
+                }
+            } else {
+                // Other argument lists: `clone(?)`, `clone($obj, ...)`, `clone(object: $obj)`, `clone()`
+                $cloneExpression->argumentExpressionList = $argumentExpressionList;
             }
 
             $cloneExpression->closeParen = $this->eat1(TokenKind::CloseParenToken);
@@ -4626,6 +4764,42 @@ class Parser {
         }
 
         return $cloneExpression;
+    }
+
+    /**
+     * @return bool whether the current token `(` after `clone` starts an argument list rather than a parenthesized expression:
+     * `clone($obj, $modifications)`, `clone()`, `clone(...)`, `clone(?)`, `clone(...$args)`, `clone(object: $obj)`
+     */
+    private function isCloneArgumentList(): bool {
+        if ($this->isParenthesizedListWithComma()) {
+            return true;
+        }
+        $tokens = $this->lexer->getTokensArray();
+        $position = $this->lexer->getCurrentPosition();
+        $first = $tokens[$position] ?? null;
+        if (!$first) {
+            return false;
+        }
+        switch ($first->kind) {
+            case TokenKind::CloseParenToken:
+            case TokenKind::DotDotDotToken:
+                return true;
+            case TokenKind::QuestionToken:
+                return ($tokens[$position + 1]->kind ?? null) === TokenKind::CloseParenToken;
+        }
+        // A named argument: `clone(object: $obj)`
+        return ($tokens[$position + 1]->kind ?? null) === TokenKind::ColonToken &&
+            \in_array($first->kind, $this->nameOrKeywordOrReservedWordTokens, true);
+    }
+
+    /**
+     * @return bool whether this is an argument of `clone` that is only an expression
+     */
+    private function isCloneObjectArgument(ArgumentExpression $argument): bool {
+        return $argument->name === null &&
+            $argument->dotDotDotToken === null &&
+            $argument->questionToken === null &&
+            $argument->expression instanceof Node;
     }
 
     /**

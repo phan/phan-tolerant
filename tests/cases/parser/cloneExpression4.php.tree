@@ -39,6 +39,7 @@
                             },
                             "commaToken": null,
                             "modifications": null,
+                            "argumentExpressionList": null,
                             "closeParen": null
                         }
                     },

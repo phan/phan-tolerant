@@ -87,7 +87,8 @@
                                                                 "textLength": 9
                                                             },
                                                             "equalsToken": null,
-                                                            "default": null
+                                                            "default": null,
+                                                            "hookList": null
                                                         }
                                                     }
                                                 ]

@@ -82,7 +82,8 @@
                                                                 "textLength": 2
                                                             },
                                                             "equalsToken": null,
-                                                            "default": null
+                                                            "default": null,
+                                                            "hookList": null
                                                         }
                                                     }
                                                 ]
@@ -244,7 +245,8 @@
                                                                 "textLength": 2
                                                             },
                                                             "equalsToken": null,
-                                                            "default": null
+                                                            "default": null,
+                                                            "hookList": null
                                                         }
                                                     }
                                                 ]
@@ -357,6 +359,7 @@
                                         "textLength": 3
                                     },
                                     "attributes": null,
+                                    "modifiers": null,
                                     "classTypeDesignator": {
                                         "QualifiedName": {
                                             "globalSpecifier": null,

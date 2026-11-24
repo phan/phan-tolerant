@@ -19,6 +19,9 @@ class PropertyHook extends Node implements ModifiedTypeInterface, FunctionLike {
     /** @var AttributeGroup[]|null */
     public $attributes;
 
+    /** @var Token|null the `&` of a hook that returns by reference: `&get => $this->x;` */
+    public $byRefToken;
+
     /** @var Token|null */
     public $hookKeyword;
 
@@ -46,6 +49,7 @@ class PropertyHook extends Node implements ModifiedTypeInterface, FunctionLike {
     const CHILD_NAMES = [
         'attributes',
         'modifiers',
+        'byRefToken',
         'hookKeyword',
         'openParen',
         'parameterList',

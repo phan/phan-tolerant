@@ -1,0 +1,253 @@
+{
+    "SourceFileNode": {
+        "statementList": [
+            {
+                "InlineHtml": {
+                    "scriptSectionEndTag": null,
+                    "text": null,
+                    "scriptSectionStartTag": {
+                        "kind": "ScriptSectionStartTag",
+                        "textLength": 6
+                    }
+                }
+            },
+            {
+                "EchoStatement": {
+                    "echoKeyword": {
+                        "kind": "EchoKeyword",
+                        "textLength": 4
+                    },
+                    "expressions": {
+                        "ExpressionList": {
+                            "children": [
+                                {
+                                    "StringLiteral": {
+                                        "startQuote": {
+                                            "kind": "DoubleQuoteToken",
+                                            "textLength": 1
+                                        },
+                                        "children": [
+                                            {
+                                                "SubscriptExpression": {
+                                                    "postfixExpression": {
+                                                        "Variable": {
+                                                            "dollar": null,
+                                                            "name": {
+                                                                "kind": "VariableName",
+                                                                "textLength": 2
+                                                            }
+                                                        }
+                                                    },
+                                                    "openBracketOrBrace": {
+                                                        "kind": "OpenBracketToken",
+                                                        "textLength": 1
+                                                    },
+                                                    "accessExpression": {
+                                                        "UnaryOpExpression": {
+                                                            "operator": {
+                                                                "kind": "MinusToken",
+                                                                "textLength": 1
+                                                            },
+                                                            "operand": {
+                                                                "NumericLiteral": {
+                                                                    "children": {
+                                                                        "kind": "IntegerLiteralToken",
+                                                                        "textLength": 1
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "closeBracketOrBrace": {
+                                                        "kind": "CloseBracketToken",
+                                                        "textLength": 1
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "kind": "EncapsedAndWhitespace",
+                                                "textLength": 1
+                                            },
+                                            {
+                                                "SubscriptExpression": {
+                                                    "postfixExpression": {
+                                                        "Variable": {
+                                                            "dollar": null,
+                                                            "name": {
+                                                                "kind": "VariableName",
+                                                                "textLength": 2
+                                                            }
+                                                        }
+                                                    },
+                                                    "openBracketOrBrace": {
+                                                        "kind": "OpenBracketToken",
+                                                        "textLength": 1
+                                                    },
+                                                    "accessExpression": {
+                                                        "UnaryOpExpression": {
+                                                            "operator": {
+                                                                "kind": "MinusToken",
+                                                                "textLength": 1
+                                                            },
+                                                            "operand": {
+                                                                "NumericLiteral": {
+                                                                    "children": {
+                                                                        "kind": "IntegerLiteralToken",
+                                                                        "textLength": 1
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "closeBracketOrBrace": {
+                                                        "kind": "CloseBracketToken",
+                                                        "textLength": 1
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "kind": "EncapsedAndWhitespace",
+                                                "textLength": 1
+                                            },
+                                            {
+                                                "kind": "OpenBraceDollarToken",
+                                                "textLength": 1
+                                            },
+                                            {
+                                                "SubscriptExpression": {
+                                                    "postfixExpression": {
+                                                        "Variable": {
+                                                            "dollar": null,
+                                                            "name": {
+                                                                "kind": "VariableName",
+                                                                "textLength": 2
+                                                            }
+                                                        }
+                                                    },
+                                                    "openBracketOrBrace": {
+                                                        "kind": "OpenBracketToken",
+                                                        "textLength": 1
+                                                    },
+                                                    "accessExpression": {
+                                                        "UnaryOpExpression": {
+                                                            "operator": {
+                                                                "kind": "MinusToken",
+                                                                "textLength": 1
+                                                            },
+                                                            "operand": {
+                                                                "NumericLiteral": {
+                                                                    "children": {
+                                                                        "kind": "IntegerLiteralToken",
+                                                                        "textLength": 1
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "closeBracketOrBrace": {
+                                                        "kind": "CloseBracketToken",
+                                                        "textLength": 1
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "kind": "CloseBraceToken",
+                                                "textLength": 1
+                                            },
+                                            {
+                                                "kind": "EncapsedAndWhitespace",
+                                                "textLength": 1
+                                            },
+                                            {
+                                                "SubscriptExpression": {
+                                                    "postfixExpression": {
+                                                        "Variable": {
+                                                            "dollar": null,
+                                                            "name": {
+                                                                "kind": "VariableName",
+                                                                "textLength": 2
+                                                            }
+                                                        }
+                                                    },
+                                                    "openBracketOrBrace": {
+                                                        "kind": "OpenBracketToken",
+                                                        "textLength": 1
+                                                    },
+                                                    "accessExpression": {
+                                                        "NumericLiteral": {
+                                                            "children": {
+                                                                "kind": "IntegerLiteralToken",
+                                                                "textLength": 1
+                                                            }
+                                                        }
+                                                    },
+                                                    "closeBracketOrBrace": {
+                                                        "kind": "CloseBracketToken",
+                                                        "textLength": 1
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "kind": "EncapsedAndWhitespace",
+                                                "textLength": 1
+                                            },
+                                            {
+                                                "SubscriptExpression": {
+                                                    "postfixExpression": {
+                                                        "Variable": {
+                                                            "dollar": null,
+                                                            "name": {
+                                                                "kind": "VariableName",
+                                                                "textLength": 2
+                                                            }
+                                                        }
+                                                    },
+                                                    "openBracketOrBrace": {
+                                                        "kind": "OpenBracketToken",
+                                                        "textLength": 1
+                                                    },
+                                                    "accessExpression": {
+                                                        "UnaryOpExpression": {
+                                                            "operator": {
+                                                                "kind": "MinusToken",
+                                                                "textLength": 1
+                                                            },
+                                                            "operand": {
+                                                                "NumericLiteral": {
+                                                                    "children": {
+                                                                        "kind": "IntegerLiteralToken",
+                                                                        "textLength": 2
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "closeBracketOrBrace": {
+                                                        "kind": "CloseBracketToken",
+                                                        "textLength": 1
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "endQuote": {
+                                            "kind": "DoubleQuoteToken",
+                                            "textLength": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "semicolon": {
+                        "kind": "SemicolonToken",
+                        "textLength": 1
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "textLength": 0
+        }
+    }
+}

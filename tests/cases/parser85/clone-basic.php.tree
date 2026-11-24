@@ -125,6 +125,7 @@
                                         "textLength": 3
                                     },
                                     "attributes": null,
+                                    "modifiers": null,
                                     "classTypeDesignator": {
                                         "QualifiedName": {
                                             "globalSpecifier": null,
@@ -195,6 +196,7 @@
                                     },
                                     "commaToken": null,
                                     "modifications": null,
+                                    "argumentExpressionList": null,
                                     "closeParen": null
                                 }
                             }
